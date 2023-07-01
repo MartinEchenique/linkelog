@@ -1,0 +1,39 @@
+<div class="post-container" *ngIf="post">
+  
+  <div class="user-container">
+    
+    <img src="{{post.autor.profilePictureUrl}}" alt="" class="profile-picture-post">
+    
+    <div class="user-info-text">
+    
+      <p class="user-name"> {{post.autor.firstName + " " + post.autor.lastName}} </p>
+      <p> {{post.autor.role}} <br />
+          <a [routerLink]="['/post', post.id ]" >
+            {{post.fechaPublicacion.toLocaleString(undefined, {year: '2-digit', month: '2-digit', day: '2-digit', weekday:undefined, hour: '2-digit', hour12: false, minute:'2-digit'})}}
+          </a>
+      </p>
+  
+    </div>
+  
+  </div>
+  
+  <p class="post-text">{{post.text}}</p>
+  
+  <button class="post-comments-count" (click)="toggleShowComments()">ver {{post.comentarios.length}} comentarios</button>
+  <div  class="coment-box" *ngIf="isLogged(), else loggedOut">
+    <img src="{{getLoggedProfilePictureUrl()}}" alt="" class="profile-picture-comment">
+    <input class="comment-input" type="text" (keyup.enter)="addCommentToPost()"  placeholder="Añadir un nuevo comentario..." [(ngModel)]="commentText" #comentInput>
+  </div>
+  <ng-template #loggedOut>
+    <p>inicia session para comentar</p>
+  </ng-template>
+  <div class="comments-container" *ngIf="showComments">
+  
+    <hr>
+  
+    <app-coment *ngFor="let comment of post.comentarios" [comment]="comment"></app-coment>
+  
+  
+  </div>
+
+</div>

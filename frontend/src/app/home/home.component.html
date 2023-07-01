@@ -1,0 +1,7 @@
+<div class="home-content">
+  <div  *ngIf="isLogged()" class="new-post-box">
+  <img src="{{getLoggedProfilePictureUrl()}}" alt="" class="profile-picture-post">
+  <textarea class="comment-input"  (keyup.enter)="addNewPost()"  placeholder="Crear nueva publicacion" [(ngModel)]="newPostText" #newPostInput></textarea>
+  </div>
+  <app-post *ngFor="let post of posts" [post]="post" class="post-bock"></app-post>
+</div>

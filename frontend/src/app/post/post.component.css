@@ -1,0 +1,86 @@
+.post-container{
+  width: 500px;
+  margin: auto;
+  border:1px solid gainsboro;
+  border-radius: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding:10px;
+}
+.user-container{
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 0px;
+}
+.user-container p{
+  margin:0px;
+}
+.user-info-text{
+ display: flex;
+ flex-direction: column;
+ align-items: flex-start;
+ font-size: small; 
+ color: rgb(51, 50, 50);
+ padding: 0px;
+ margin: 0px 0px 0px 10px;
+}
+.user-info-text .user-name{
+  font-size: medium; 
+  font-weight: bold;
+  color: black;
+  padding: 0px;
+ }
+.profile-picture-post{
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+}
+hr{
+  width: 80%;
+  color: azure;
+}
+.post-comments-count{
+  align-self: flex-end;
+  font-size: small;
+  margin: 10px 10px 0px 10px;
+}
+.post-text{
+  font-size: medium;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.comments-container{
+  width: 100%;
+}
+
+button{
+  border: none;
+  background: none;
+}
+
+button:hover{
+  text-decoration: underline;
+}
+
+.comment-input{
+  width: 80%;
+  align-self: center;
+  height: 30px;
+  border: 1px solid #e3e3e3;
+  border-radius: 15px;
+}
+
+.coment-box{
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.profile-picture-comment{
+  width: 35px;
+  height: 35px;
+  border-radius: 25px;
+  margin: 5px;
+  padding-top: 5px;
+}

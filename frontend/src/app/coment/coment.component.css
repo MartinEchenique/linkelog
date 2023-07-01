@@ -1,0 +1,46 @@
+.profile-picture-comment{
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  margin: 5px;
+  padding-top: 5px;
+}
+.comment-container{
+  display: flex;
+  margin: 5px;
+}
+.comment-body{
+  width: 100%;
+  background-color: #f2f2f2;
+  padding: 5px 10px 10px 15px;
+  border-radius: 0px 15px 15px 15px;
+
+
+}
+.user-info-text{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.user-info-text p {
+  margin: 0px;
+
+}
+
+.user-info-text .user-name{
+  font-size: medium; 
+  font-weight: bold;
+  color: black;
+  padding: 0px;
+ }
+
+ .light-text{
+  font-size: small; 
+  color: rgb(51, 50, 50);
+ }
+
+ .comment-text{
+  font-size: medium;
+  font-family: 'Times New Roman', Times, serif;
+}

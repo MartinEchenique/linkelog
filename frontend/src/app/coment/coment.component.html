@@ -1,0 +1,16 @@
+<div class="comment-container">
+  <img src="{{comment.autor.profilePictureUrl}}" alt="" class="profile-picture-comment">
+  <div class="comment-body">
+    <div class="user-info-text">
+      <p><span class="user-name">{{comment.autor.firstName + " " + comment.autor.lastName}}</span>
+        <br />
+        <span class="light-text">{{comment.autor.role}}</span>
+      </p>
+      <p class="light-text">
+        {{comment.fechaPublicacion.toLocaleString(undefined, {year: '2-digit', month: '2-digit', day: '2-digit', weekday:undefined, hour: '2-digit', hour12: false, minute:'2-digit'})}}
+      </p>
+    </div>
+    <p class="comment-text">{{comment.texto}}</p>
+  </div>
+
+</div>
