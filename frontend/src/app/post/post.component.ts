@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { LoginService } from '../login.service';
 import { Comentario } from '../models/comentario.model';
 import { Post } from '../models/post.model';
@@ -27,8 +26,6 @@ export class PostComponent implements OnInit{
       this.post = postData;
     })
     }  
-
-    this.showComments = this.showComments ? true : false;
   }
   getPostIdFromUrl() {
     return this.route.snapshot.paramMap.get('id') ;
@@ -44,10 +41,18 @@ export class PostComponent implements OnInit{
     let loggedUser = this.loginService.getLoggedUser();
     return loggedUser.profilePictureUrl;
   }
+  loadComments(){
+    this.obtenerPostServicio.obtenerComments(this.post.id).subscribe((data:any)=>{
+      this.post.comentarios = data;
+      this.showComments = true;
+    });
+  }
   addCommentToPost(){
-    let  commentToAdd = new Comentario(this.loginService.getLoggedUser(), this.commentText);
-    this.obtenerPostServicio.addComment(this.post.id, commentToAdd);
-    this.showComments = true;
+    let  commentToAdd = new Comentario(this.loginService.getLoggedUser(), this.commentText, +this.post.id);
+    this.obtenerPostServicio.addComment(commentToAdd).subscribe(()=> {
+      this.loadComments();
+    });
+    
     this.commentText = ""
   }
 }

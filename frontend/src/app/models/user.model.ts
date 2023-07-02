@@ -1,4 +1,5 @@
 export class User{
+  userId:number;
   firstName:string;
   lastName:string;
   companyName:string;
@@ -6,7 +7,7 @@ export class User{
   role:string;
 
 
-  constructor(firstName:string, lastName:string, companyName?:string, role?:string,profilePictureUrl?:string ){
+  constructor(userId:number,firstName:string, lastName:string, companyName?:string, role?:string,profilePictureUrl?:string ){
     this.firstName = firstName;
     this.lastName = lastName;
     this.companyName = companyName ? companyName : "Company not defined";

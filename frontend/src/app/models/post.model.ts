@@ -22,5 +22,8 @@ export class Post{
    }
    addComment(comment:Comentario){
       this.comentarios.push(comment);
+   }
+   setComments(comentarios:Comentario[]){
+      this.comentarios = comentarios;
    }   
 }

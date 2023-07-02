@@ -10,9 +10,11 @@ import { LoginService } from '../login.service';
 export class LoginComponent {
   constructor(private loginService:LoginService, private route: ActivatedRoute, private router:Router){
   }
-  login(){
-    this.loginService.login();
-    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    this.router.navigate([returnUrl]);
+  login(userId:number){
+    this.loginService.login(userId).add(()=> {
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      this.router.navigate([returnUrl]);
+    });
+
   }
 }

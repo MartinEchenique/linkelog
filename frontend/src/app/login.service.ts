@@ -14,8 +14,8 @@ export class LoginService {
     let isLogged = this.loggedUser ? true : false;
     return isLogged;
   }
-  login():Subscription{
-    return this.http.get(`http://localhost:8080/user/${1}`).subscribe((data:any) =>{
+  login(userId:number):Subscription{
+    return this.http.get(`http://localhost:8080/user/${userId}`).subscribe((data:any) =>{
       this.loggedUser = data;
     });
    // this.loggedUser = new User("Albert", "Einsten","","","https://thispersondoesnotexist.com/");

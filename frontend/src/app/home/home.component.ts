@@ -22,10 +22,9 @@ export class HomeComponent implements OnInit{
     });
   }
   addNewPost(){
-    let id = "" + (this.obtenerPostService.generatedPosts.length + 2);
     let comments:Comentario[] = []
     let reactions:Reaccion[] = []
-    this.obtenerPostService.addNewPost(new Post(id, this.loginService.getLoggedUser(),new Date(),comments, reactions, this.newPostText));
+    this.obtenerPostService.addNewPost(new Post("", this.loginService.getLoggedUser(),new Date(),comments, reactions, this.newPostText));
     this.newPostText = "";
     }
   isLogged(){
