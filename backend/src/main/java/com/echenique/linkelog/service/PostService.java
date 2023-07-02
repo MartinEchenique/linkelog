@@ -60,4 +60,7 @@ public class PostService {
         }
         return postDtos;
     }
+    public void addNewPost(PostDto post){
+       this.postRepo.addNewPost(post.getAutor().getUserId(), post.getText(), post.getImg());
+    }
 }

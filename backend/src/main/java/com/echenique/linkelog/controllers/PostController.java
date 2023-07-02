@@ -14,13 +14,14 @@ public class PostController {
     @Autowired
     private PostRepositoryInteface postRepository;
     @Autowired
-
     private PostService postService;
+
     @GetMapping(value = "/post/{id}")
     public Post getPostById(@PathVariable int id){
         Post postToReturn = postRepository.getPostById(id);
         return  postToReturn;
     }
+
     @GetMapping(value = "/postComplete/{id}")
     public PostDto getCompletePostById(@PathVariable int id){
         PostDto postToReturn = postService.getCompletePost(id);
@@ -33,6 +34,10 @@ public class PostController {
         return posts;
     }
 
+    @PostMapping(value="/post/add")
+    public void addPost(@RequestBody PostDto post){
+        this.postService.addNewPost(post);
+    }
 
 
 }

@@ -1,12 +1,12 @@
 package com.echenique.linkelog.dto;
 
 public class UserDto {
-    int userId;
-    String firstName;
-    String lastName;
-    String companyName;
-    String profilePictureUrl;
-    String role;
+    private int userId;
+    private String firstName;
+    private String lastName;
+    private String companyName;
+    private String profilePictureUrl;
+    private String role;
 
     public int getUserId() {
         return userId;
