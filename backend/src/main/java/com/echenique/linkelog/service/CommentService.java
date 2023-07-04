@@ -32,8 +32,7 @@ public class CommentService {
         List<CommentDto> commentList = new ArrayList<CommentDto>();
         for (Comentario comment: commentRepo.getCommentsByPostId(postId))
         {
-            System.out.println(comment);
-            commentList.add(this.getCommentDto(comment));
+                      commentList.add(this.getCommentDto(comment));
         }
         return commentList;
     }

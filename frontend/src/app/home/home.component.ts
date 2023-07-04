@@ -14,19 +14,39 @@ export class HomeComponent implements OnInit{
 
   posts:Post[];
   newPostText:string;
+  newPostImg:string;
+  newPostModal: boolean;
   constructor(private obtenerPostService:ObtenerPostService, private loginService:LoginService){}
   ngOnInit(): void {
+    this. getPosts();
+    this.newPostModal = false;
+  }
+  getPosts(){
     this.obtenerPostService.getPosts().subscribe((data:any) => {
       this.posts = data;
-  
     });
   }
   addNewPost(){
     let comments:Comentario[] = []
     let reactions:Reaccion[] = []
-    this.obtenerPostService.addNewPost(new Post("", this.loginService.getLoggedUser(),new Date(),comments, reactions, this.newPostText));
+    this.obtenerPostService.addNewPost(new Post(
+                                        "",
+                                        this.loginService.getLoggedUser(),
+                                        new Date(),comments, 
+                                        reactions,
+                                        this.newPostText,
+                                        this.newPostImg
+                                        )).subscribe(() => {
+                                          this.getPosts();
+                                          this.toggleNewPostModal();
+                                        });
     this.newPostText = "";
+    this.newPostImg = "";
+
     }
+  toggleNewPostModal(){
+    this.newPostModal = !this.newPostModal;
+  }
   isLogged(){
     return this.loginService.isLogged();
   }
