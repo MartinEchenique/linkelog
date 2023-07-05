@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,10 +24,10 @@ public class PostRepository implements PostRepositoryInteface {
     }
 
     @Override
-    public void addNewPost(int userId, String postText, String postImgUrl) {
-        String sql = "INSERT INTO post (userprofileid, posttext, postimgurl) " +
-                "VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, userId, postText, postImgUrl);
+    public void addNewPost(int userId, String postText, String postImgUrl, Timestamp postDate) {
+        String sql = "INSERT INTO post (userprofileid, posttext, postimgurl,pubdate) " +
+                "VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, userId, postText, postImgUrl, postDate);
     }
 
     @Override
@@ -45,6 +46,14 @@ public class PostRepository implements PostRepositoryInteface {
         return jdbcTemplate.query(sql,new PostMapper());
     }
 
+    public List<Post> getPostPageDecendentOrder(int pageSize, int pageNumber){
+        String sql = "SELECT * FROM post p ORDER BY pubdate DESC LIMIT ? OFFSET ? ";
+        return jdbcTemplate.query(sql, new PostMapper(), pageSize, pageNumber*pageSize);
+    }
+    public List<Post> getPostPageAscendentOrder(int pageSize, int pageNumber){
+        String sql = "SELECT * FROM post p ORDER BY pubdate ASC LIMIT ? OFFSET ? ";
+        return jdbcTemplate.query(sql, new PostMapper(), pageSize, pageNumber*pageSize);
+    }
     private class PostMapper implements RowMapper<Post> {
 
         @Override
@@ -54,9 +63,10 @@ public class PostRepository implements PostRepositoryInteface {
             post.setPostText(rs.getString("postText"));
             post.setAutorId(rs.getInt("userprofileid"));
             post.setPostImgUrl(rs.getString("postimgurl"));
-            post.setFechaPublicacion(rs.getDate("pubdate"));
+            post.setFechaPublicacion(rs.getTimestamp("pubdate"));
 
             return post;
         }
     }
+
 }

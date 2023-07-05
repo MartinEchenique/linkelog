@@ -1,19 +1,19 @@
 package com.echenique.linkelog.models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Post {
     private int autorId;
     private int postId;
     private String postText;
     private String postImgUrl;
-    private Date fechaPublicacion;
+    private Timestamp fechaPublicacion;
 
-    public Date getFechaPublicacion() {
+    public Timestamp getFechaPublicacion() {
         return fechaPublicacion;
     }
 
-    public void setFechaPublicacion(Date fechaPublicacion) {
+    public void setFechaPublicacion(Timestamp fechaPublicacion) {
         this.fechaPublicacion = fechaPublicacion;
     }
 

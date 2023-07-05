@@ -26,6 +26,7 @@ public class PostService {
     private CommentService commentService;
     @Autowired
     private UserService userService;
+
     public PostDto getCompletePost(int postId){
         Post post = postRepo.getPostById(postId);
         List<Comentario> comments = commentRepo.getCommentsByPostId(postId);
@@ -61,6 +62,14 @@ public class PostService {
         return postDtos;
     }
     public void addNewPost(PostDto post){
-       this.postRepo.addNewPost(post.getAutor().getUserId(), post.getText(), post.getImg());
+       this.postRepo.addNewPost(post.getAutor().getUserId(), post.getText(), post.getImg(), post.getFechaPublicacion());
+    }
+    public List<PostDto> getPostsPage(int page){
+        List<PostDto> posts = new ArrayList<PostDto>();
+        for (Post post:postRepo.getPostPageDecendentOrder(5, page)
+             ) {
+                    posts.add(this.getCompletePost(post));
+        }
+        return posts;
     }
 }

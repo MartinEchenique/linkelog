@@ -7,6 +7,7 @@ import com.echenique.linkelog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 @CrossOrigin("http://localhost:4200")
 @RestController
@@ -34,9 +35,16 @@ public class PostController {
         return posts;
     }
 
+    @GetMapping(value="/postPage/{page}")
+    public List<PostDto> getPostPage(@PathVariable int page){
+        return new ArrayList<>();
+    }
+
     @PostMapping(value="/post/add")
     public void addPost(@RequestBody PostDto post){
+        System.out.println("POST RECIBIDO" + post.getFechaPublicacion());
         this.postService.addNewPost(post);
+
     }
 
 

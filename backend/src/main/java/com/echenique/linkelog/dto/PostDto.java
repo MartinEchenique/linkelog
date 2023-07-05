@@ -1,12 +1,12 @@
 package com.echenique.linkelog.dto;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class PostDto {
     UserDto autor;
     List<CommentDto> comentarios;
-    Date fechaPublicacion;
+    Timestamp fechaPublicacion;
     List reacciones;
     String id;
     String text;
@@ -15,7 +15,7 @@ public class PostDto {
     public PostDto() {
     }
 
-    public PostDto(UserDto autor, List<CommentDto> comentarios, Date fechaPublicacion, List reacciones, String id, String text, String img) {
+    public PostDto(UserDto autor, List<CommentDto> comentarios, Timestamp fechaPublicacion, List reacciones, String id, String text, String img) {
         this.autor = autor;
         this.comentarios = comentarios;
         this.fechaPublicacion = fechaPublicacion;
@@ -41,11 +41,11 @@ public class PostDto {
         this.comentarios = comentarios;
     }
 
-    public Date getFechaPublicacion() {
+    public Timestamp getFechaPublicacion() {
         return fechaPublicacion;
     }
 
-    public void setFechaPublicacion(Date fechaPublicacion) {
+    public void setFechaPublicacion(Timestamp fechaPublicacion) {
         this.fechaPublicacion = fechaPublicacion;
     }
 
