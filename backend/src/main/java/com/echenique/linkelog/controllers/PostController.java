@@ -37,14 +37,12 @@ public class PostController {
 
     @GetMapping(value="/postPage/{page}")
     public List<PostDto> getPostPage(@PathVariable int page){
-        return new ArrayList<>();
-    }
+        return postService.getPostsPage(page);
+        }
 
     @PostMapping(value="/post/add")
     public void addPost(@RequestBody PostDto post){
-        System.out.println("POST RECIBIDO" + post.getFechaPublicacion());
         this.postService.addNewPost(post);
-
     }
 
 
