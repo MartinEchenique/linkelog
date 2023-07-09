@@ -28,23 +28,7 @@ class CommentServiceTest {
     //private CommentService commentService;
     @BeforeEach
     private void setup(){
-        //Set up comment to be used on test cases
-        comment = new Comment();
-        comment.setCommentId(1);
-        comment.setPostId(1);
-        comment.setAutor(1);
-        comment.setTexto("hello test");
-        comment.setFechaPublicacion(currentDate);
-        //set User profile to be used on test case
-        user = new UserDto();
-        user.setUserId(1);
-        //set up DTO to be used on test cases
-        commentDto = new CommentDto();
-        commentDto.setTexto("hello test");
-        commentDto.setAutor(user);
-        commentDto.setFechaPublicacion(currentDate);
-        commentDto.setPostId(1);
-        commentDto.setCommentId(1);
+
     }
 
     @Test
