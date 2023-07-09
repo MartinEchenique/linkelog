@@ -8,6 +8,7 @@ public class LinkelogApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LinkelogApplication.class, args);
+
 	}
 
 }

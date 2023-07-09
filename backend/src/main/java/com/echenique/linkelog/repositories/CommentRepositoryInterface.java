@@ -1,13 +1,14 @@
 package com.echenique.linkelog.repositories;
 
-import com.echenique.linkelog.models.Comentario;
+import com.echenique.linkelog.models.Comment;
+import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface CommentRepositoryInterface {
-    public void addComment(int postId, String commentText, int authorId, Date pubDate);
-    public Comentario getCommentById(int id);
+    public int addComment(int postId, String commentText, int authorId, Timestamp pubDate);
+    public Comment getCommentById(int id);
 
-    public List<Comentario> getCommentsByPostId(int id);
+    public List<Comment> getCommentsByPostId(int id);
 }

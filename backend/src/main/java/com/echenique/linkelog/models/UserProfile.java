@@ -8,6 +8,7 @@ public class UserProfile {
     private String profilePictureUrl;
     private String role;
 
+
     public UserProfile(){};
     public UserProfile(int userId, String firstName, String lastName) {
         this.userId = userId;
@@ -30,6 +31,10 @@ public class UserProfile {
         this(userId, firstName, lastName, companyName);
         this.profilePictureUrl = profilePictureUrl;
         this.role = role;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getUserId() {

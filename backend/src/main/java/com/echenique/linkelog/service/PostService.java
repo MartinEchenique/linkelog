@@ -3,9 +3,8 @@ package com.echenique.linkelog.service;
 import com.echenique.linkelog.dto.CommentDto;
 import com.echenique.linkelog.dto.PostDto;
 import com.echenique.linkelog.dto.UserDto;
-import com.echenique.linkelog.models.Comentario;
+import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.models.Post;
-import com.echenique.linkelog.models.UserProfile;
 import com.echenique.linkelog.repositories.CommentRepositoryInterface;
 import com.echenique.linkelog.repositories.PostRepositoryInteface;
 import com.echenique.linkelog.repositories.UserRepositoryInterface;
@@ -29,25 +28,25 @@ public class PostService {
 
     public PostDto getCompletePost(int postId){
         Post post = postRepo.getPostById(postId);
-        List<Comentario> comments = commentRepo.getCommentsByPostId(postId);
+        List<Comment> comments = commentRepo.getCommentsByPostId(postId);
 
         UserDto userDto = userService.getUserDtoById(post.getAutorId());
         List<CommentDto> commentsDto = new ArrayList<>();
-        for (Comentario comentario: comments
+        for (Comment comment : comments
              ) {
-            commentsDto.add(commentService.getCommentDto(comentario));
+            commentsDto.add(commentService.getCommentDto(comment));
         }
 
         return new PostDto(userDto, commentsDto, post.getFechaPublicacion(), new ArrayList(), Integer.toString(post.getPostId()),post.getPostText(), post.getPostImgUrl());
     }
     public PostDto getCompletePost(Post post){
-        List<Comentario> comments = commentRepo.getCommentsByPostId(post.getPostId());
+        List<Comment> comments = commentRepo.getCommentsByPostId(post.getPostId());
 
         UserDto userDto = userService.getUserDtoById(post.getAutorId());
         List<CommentDto> commentsDto = new ArrayList<>();
-        for (Comentario comentario: comments
+        for (Comment comment : comments
         ) {
-            commentsDto.add(commentService.getCommentDto(comentario));
+            commentsDto.add(commentService.getCommentDto(comment));
         }
 
         return new PostDto(userDto, commentsDto, post.getFechaPublicacion(), new ArrayList(), Integer.toString(post.getPostId()),post.getPostText(), post.getPostImgUrl());

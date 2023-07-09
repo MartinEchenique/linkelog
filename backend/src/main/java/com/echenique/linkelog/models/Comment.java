@@ -1,14 +1,24 @@
 package com.echenique.linkelog.models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
-public class Comentario {
+public class Comment {
 
     private int autor;
     private String Texto;
-    private Date fechaPublicacion;
+    private Timestamp fechaPublicacion;
     private int commentId;
     private int postId;
+    public Comment(){
+    }
+
+    public Comment(int autor, String texto, Timestamp fechaPublicacion, int commentId, int postId) {
+        this.autor = autor;
+        Texto = texto;
+        this.fechaPublicacion = fechaPublicacion;
+        this.commentId = commentId;
+        this.postId = postId;
+    }
 
     public int getAutor() {
         return autor;
@@ -26,11 +36,11 @@ public class Comentario {
         Texto = texto;
     }
 
-    public Date getFechaPublicacion() {
+    public Timestamp getFechaPublicacion() {
         return fechaPublicacion;
     }
 
-    public void setFechaPublicacion(Date fechaPublicacion) {
+    public void setFechaPublicacion(Timestamp fechaPublicacion) {
         this.fechaPublicacion = fechaPublicacion;
     }
 
@@ -49,8 +59,6 @@ public class Comentario {
     public void setPostId(int postId) {
         this.postId = postId;
     }
-
-
 
     @Override
     public String toString() {
