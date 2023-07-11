@@ -13,12 +13,12 @@ public class CommentDto {
     public CommentDto() {
     }
 
-    public CommentDto(UserDto autor, String texto, Timestamp fechaPublicacion, int postId) {
+    public CommentDto(UserDto autor, String texto, Timestamp fechaPublicacion, int postId, int commentId) {
         this.autor = autor;
         this.texto = texto;
         this.fechaPublicacion = fechaPublicacion;
         this.postId = postId;
-
+        this.commentId = commentId;
     }
 
     public int getCommentId() {

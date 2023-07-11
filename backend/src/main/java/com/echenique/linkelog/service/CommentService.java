@@ -16,9 +16,9 @@ public class CommentService {
     UserService userService;
     @Autowired
     CommentRepositoryInterface commentRepo;
-    public CommentDto getCommentDto( Comment comment){
+    public CommentDto getCommentDto(Comment comment){
         UserDto user = userService.getUserDtoById(comment.getAutor());
-        return new CommentDto(user, comment.getTexto(), comment.getFechaPublicacion(), comment.getPostId());
+        return new CommentDto(user, comment.getTexto(), comment.getFechaPublicacion(), comment.getPostId(), comment.getCommentId());
     }
 
     public CommentDto getCommentDtoById(int id){
