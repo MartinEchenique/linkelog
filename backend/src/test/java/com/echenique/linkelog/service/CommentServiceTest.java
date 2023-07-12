@@ -3,30 +3,34 @@ package com.echenique.linkelog.service;
 
 import com.echenique.linkelog.dto.CommentDto;
 import com.echenique.linkelog.dto.UserDto;
+import com.echenique.linkelog.exception.CommentLimitReached;
 import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.repositories.CommentRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
 class CommentServiceTest {
 
-    @Mock
-    UserService userService;
-    @Mock
-    CommentRepository commentRepo;
-    @InjectMocks
-    CommentService commentService;
+    @MockBean
+    private UserService userService;
+    @MockBean
+    private CommentRepository commentRepo;
+
+    @Autowired
+    private CommentService commentService;
+
     @Test
     public void commentService_getCommentDto_returnsDtoFromComment(){
         Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -49,12 +53,13 @@ class CommentServiceTest {
         UserDto user = new UserDto();
         Timestamp now = new Timestamp(System.currentTimeMillis());
         Comment comment = new Comment(1,"comment text", now ,1,1);
+        Optional<Comment> optionalComment = Optional.of(comment);
         CommentDto dto = new CommentDto(user, "comment text", now, 1,1);
 
         CommentService commentService1 = spy(commentService);
 
 
-        when(commentRepo.getCommentById(1)).thenReturn(comment);
+        when(commentRepo.getCommentById(1)).thenReturn(optionalComment);
         when(commentService1.getCommentDto(comment)).thenReturn(dto);
 
         CommentDto commentDto= commentService1.getCommentDtoById(1);
@@ -82,6 +87,27 @@ class CommentServiceTest {
         assertEquals(2, comments.size());
         assertEquals(dto, comments.get(0));
         assertEquals(dto1, comments.get(1));
+
+    }
+
+    @Test
+    public void commentService_addComment_throwsCommentLimitReached(){
+        UserDto user = new UserDto();
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        CommentDto dto = new CommentDto(user, "comment text", now, 4,1);
+
+        when(commentRepo.countComments(4)).thenReturn(20);
+        assertThrows(CommentLimitReached.class,() -> commentService.addComment(dto));
+    }
+    @Test
+    public void commentService_addComment_callsRepositoryAddComment(){
+        UserDto user = new UserDto();
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        CommentDto dto = new CommentDto(user, "comment text", now, 4,1);
+
+        when(commentRepo.countComments(4)).thenReturn(19);
+        commentService.addComment(dto);
+        verify(commentRepo, times(1)).addComment(4,"comment text", user.getUserId(), now);
 
     }
 }

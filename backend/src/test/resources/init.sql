@@ -16,7 +16,8 @@ CREATE TABLE profile (
 insert into profile (firstname, lastname, companyname, profilepictureurl, userrole)
 values ('Example 1', 'One', 'Company 1', 'img:url', 'Role1'),
        ('Example 2', 'Two', 'Company 2', 'img:url', 'Role2'),
-       ('Example 3', 'Three', 'Company 3', 'img:url', 'Role3');
+       ('Example 3', 'Three', 'Company 3', 'img:url', 'Role3'),
+       ('Example 4', 'Four', 'Company 4', 'img:url', 'Role4');
 -- Create post table
 CREATE TABLE post (
     postid INT PRIMARY KEY AUTO_INCREMENT,
@@ -30,7 +31,8 @@ CREATE TABLE post (
 insert into post (userprofileid, posttext, postimgurl, pubdate)
     values (1, 'Post 1', 'img_url', '1-2-12'),
             (2, 'Post 2', 'img_url', '2-2-12'),
-            (3, 'Post 3', 'img_url', '3-2-12');
+            (3, 'Post 3', 'img_url', '3-2-12'),
+            (4, 'Post 4', 'img_url', '4-2-12');
 
 -- Create comments table
 CREATE TABLE comments (
@@ -48,4 +50,25 @@ insert into comments(commenttext, pubdate, postid, autorid)
            ('Comment 2', '2000-02-02 00:00:02', 2, 2 ),
            ('Comment 3', '2000-03-03 00:00:03', 3, 3 ),
            ('Comment 4', '2000-01-01 00:00:04', 3, 1 ),
-           ('Comment 5', '2000-01-01 00:00:05', 3, 1 );
+           ('Comment 5', '2000-01-01 00:00:05', 3, 1 ),
+           ('Comment 1 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 2 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 3 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 4 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 5 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 6 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 7 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 8 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 9 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 10 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 11 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 12 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 13 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 14 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 15 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 16 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 17 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 18 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 19 - post 4', '2000-01-01 00:00:05', 4, 1 ),
+           ('Comment 20 - post 4', '2000-01-01 00:00:05', 4, 1 );
+

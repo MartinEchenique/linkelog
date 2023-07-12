@@ -2,6 +2,8 @@ package com.echenique.linkelog.service;
 
 import com.echenique.linkelog.dto.CommentDto;
 import com.echenique.linkelog.dto.UserDto;
+import com.echenique.linkelog.exception.CommentLimitReached;
+import com.echenique.linkelog.exception.CommentNotFound;
 import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.repositories.CommentRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentService {
@@ -21,10 +24,9 @@ public class CommentService {
         return new CommentDto(user, comment.getTexto(), comment.getFechaPublicacion(), comment.getPostId(), comment.getCommentId());
     }
 
-    public CommentDto getCommentDtoById(int id){
-        Comment comment = commentRepo.getCommentById(id);
-        CommentDto commentDto = this.getCommentDto(comment);
-        return commentDto;
+    public CommentDto getCommentDtoById(int id) {
+        Comment comment = commentRepo.getCommentById(id).orElseThrow(CommentNotFound::new);
+        return this.getCommentDto(comment);
     }
 
     public List<CommentDto> getCommentsByPostId(int postId){
@@ -36,8 +38,12 @@ public class CommentService {
         return commentList;
     }
 
-    public void addComment(CommentDto comment){
-        commentRepo.addComment(comment.getPostId(),comment.getTexto(),comment.getAutor().getUserId(),comment.getFechaPublicacion());
+    public void addComment(CommentDto comment) throws CommentLimitReached{
+       if(commentRepo.countComments(comment.getPostId()) < 20){
+           commentRepo.addComment(comment.getPostId(),comment.getTexto(),comment.getAutor().getUserId(),comment.getFechaPublicacion());
+       }else{
+           throw new CommentLimitReached();
+       }
     }
 
 }

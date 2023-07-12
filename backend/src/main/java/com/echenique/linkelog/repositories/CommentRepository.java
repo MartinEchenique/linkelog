@@ -7,10 +7,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import java.sql.Timestamp;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -26,22 +28,34 @@ public class CommentRepository implements CommentRepositoryInterface {
     }
 
     @Override
-    public Comment getCommentById(int id) {
+    public  Optional<Comment> getCommentById(int id) {
         String sql = "SELECT * FROM comments c WHERE  c.commentid = ?;";
+        Comment result;
         try {
-            return jdbcTemplate.queryForObject(sql, new CommentMapper(), id);
+            result = jdbcTemplate.queryForObject(sql, new CommentMapper(), id);
 
         }catch (EmptyResultDataAccessException e){
-            return null;
+            result = null;
         }
+        Optional<Comment> optionalComment = Optional.ofNullable(result);
+        return optionalComment;
     }
 
     @Override
-    public List<Comment> getCommentsByPostId(int id) {
+    public List<Comment> getCommentsByPostId(int postId) {
         String sql = "SELECT * FROM comments c where c.postid = ?;";
-        return jdbcTemplate.query(sql, new CommentMapper(), id) ;
+        return jdbcTemplate.query(sql, new CommentMapper(), postId) ;
     }
 
+    @Override
+    public int countComments(int postId) {
+        System.out.println("COMENTARIO ID" + postId);
+        String sql = "SELECT COUNT(C.commentid) AS count FROM comments c where c.postid = ?;";
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, postId);
+        sqlRowSet.first();
+        return sqlRowSet.getInt("count");
+
+    }
 
     public class CommentMapper implements RowMapper<Comment>{
 
