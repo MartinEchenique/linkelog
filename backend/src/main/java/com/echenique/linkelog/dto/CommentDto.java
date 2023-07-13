@@ -1,5 +1,7 @@
 package com.echenique.linkelog.dto;
 
+import org.springframework.http.converter.json.GsonBuilderUtils;
+
 import java.sql.Timestamp;
 
 public class CommentDto {

@@ -11,4 +11,8 @@ public interface CommentRepositoryInterface {
     public Optional<Comment> getCommentById(int id);
     public List<Comment> getCommentsByPostId(int id);
     public int countComments(int postId);
+
+    List<Comment> getCommentByUserId(int userId);
+
+    int deleteComment(int commentId);
 }

@@ -49,12 +49,23 @@ public class CommentRepository implements CommentRepositoryInterface {
 
     @Override
     public int countComments(int postId) {
-        System.out.println("COMENTARIO ID" + postId);
         String sql = "SELECT COUNT(C.commentid) AS count FROM comments c where c.postid = ?;";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, postId);
         sqlRowSet.first();
         return sqlRowSet.getInt("count");
 
+    }
+
+    @Override
+    public List<Comment> getCommentByUserId(int userId) {
+        String sql = "SELECT * from comments c where c.autorid = ?;";
+        return jdbcTemplate.query(sql, new CommentMapper(), userId);
+    }
+
+    @Override
+    public int deleteComment(int commentId) {
+        String sql = "DELETE from comments c where c.commentid = ?;";
+        return jdbcTemplate.update(sql, commentId);
     }
 
     public class CommentMapper implements RowMapper<Comment>{

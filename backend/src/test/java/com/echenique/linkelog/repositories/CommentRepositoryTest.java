@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,6 +58,7 @@ class CommentRepositoryTest {
         assertEquals(true,isOptionalEmpty);
 
     }
+
     @Test
     @DisplayName("throws if data is missing")
     public void commentRepository_addComment_throwsIfRequiredDataMissing(){
@@ -68,6 +68,7 @@ class CommentRepositoryTest {
         assertThrows(DataIntegrityViolationException.class, () -> commentRepository.addComment(1,"Comment text", 0, currentTime));
         assertThrows(DataIntegrityViolationException.class, () -> commentRepository.addComment(1,"Comment text", 1, null));
     }
+
     @Test
     @DisplayName("throws if Fk doesn't exist")
     public void commentRepository_addComment_throwsIfFkDoesntExist(){
@@ -77,8 +78,8 @@ class CommentRepositoryTest {
         assertThrows(DataIntegrityViolationException.class, () -> commentRepository.addComment(1,"Comment text", 0, currentTime));
         assertThrows(DataIntegrityViolationException.class, () -> commentRepository.addComment(1,"Comment text", 1, null));
     }
-
     @Sql("/init_no_comments.sql")
+
     @Test
     @DisplayName("If comment text is missing save void String")
     public void commentRepository_addComment_saveEmptyString(){
@@ -101,4 +102,27 @@ class CommentRepositoryTest {
     public void commentRepository_countComment_getCountNumber(){
         assertEquals(20, commentRepository.countComments(4));
     }
+
+    @Test
+    @DisplayName("Get comment by user id")
+    public void commentRepository_getCommentByUserId_returnComments(){
+        List<Comment> comments = commentRepository.getCommentByUserId(3);
+        assertEquals(3, comments.size());
+    }
+
+    @Test
+    @DisplayName("Delete comment")
+    public void commentRepository_deleteCommentById_returnOneModifiedRows(){
+        int modifiedRows = commentRepository.deleteComment(1);
+        assertEquals(1, modifiedRows);
+        assertTrue(commentRepository.getCommentById(1).isEmpty());
+    }
+    @Test
+    @DisplayName("Delete comment doesn't delete")
+    public void commentRepository_deleteCommentById_returnZeroModifiedRows(){
+        int modifiedRows = commentRepository.deleteComment(100);
+        assertEquals(0, modifiedRows);
+        assertTrue(commentRepository.getCommentById(100).isEmpty());
+    }
+
 }

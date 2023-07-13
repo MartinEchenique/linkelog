@@ -1,11 +1,15 @@
 package com.echenique.linkelog.service;
 
 
+import com.echenique.linkelog.dto.AddCommentDto;
 import com.echenique.linkelog.dto.CommentDto;
+import com.echenique.linkelog.dto.UserCommentsDto;
 import com.echenique.linkelog.dto.UserDto;
-import com.echenique.linkelog.exception.CommentLimitReached;
+import com.echenique.linkelog.exceptions.CommentLimitReached;
+import com.echenique.linkelog.exceptions.CommentNotFound;
 import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.repositories.CommentRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +52,6 @@ class CommentServiceTest {
         assertEquals(1,commentDto.getPostId(), "Incorrect post ID");
         assertEquals(1,commentDto.getCommentId(), "Incorrect comment ID");
     }
-
     @Test
     public void commentService_getCommentDtoById_returnsDtoFromId(){
         UserDto user = new UserDto();
@@ -66,7 +70,13 @@ class CommentServiceTest {
 
         assertEquals(dto, commentDto);
     }
+    @Test
+    public void commentService_getCommentDtoById_throwsIfNotFound(){
+        Optional<Comment> optionalComment = Optional.empty();
 
+        when(commentRepo.getCommentById(1)).thenReturn(optionalComment);
+        assertThrows(CommentNotFound.class,() ->  commentService.getCommentDtoById(1));
+    }
     @Test
     public void commentService_getCommentsByPostId(){
         UserDto user = new UserDto();
@@ -89,25 +99,55 @@ class CommentServiceTest {
         assertEquals(dto1, comments.get(1));
 
     }
-
     @Test
     public void commentService_addComment_throwsCommentLimitReached(){
-        UserDto user = new UserDto();
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        CommentDto dto = new CommentDto(user, "comment text", now, 4,1);
+        AddCommentDto dto = new AddCommentDto(1,"comment text", now,4);
 
         when(commentRepo.countComments(4)).thenReturn(20);
         assertThrows(CommentLimitReached.class,() -> commentService.addComment(dto));
     }
     @Test
     public void commentService_addComment_callsRepositoryAddComment(){
-        UserDto user = new UserDto();
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        CommentDto dto = new CommentDto(user, "comment text", now, 4,1);
+        AddCommentDto dto = new AddCommentDto(1,"comment text", now,4);
 
         when(commentRepo.countComments(4)).thenReturn(19);
         commentService.addComment(dto);
-        verify(commentRepo, times(1)).addComment(4,"comment text", user.getUserId(), now);
+        verify(commentRepo, times(1)).addComment(4,"comment text", 1, now);
+    }
+    @Test
+    @DisplayName("Get comment by user id - 3 comments")
+    public void commentService_getCommentsByUserId_returnCommentsDto(){
+        List<Comment> comments = List.of(new Comment(), new Comment(), new Comment());
+        UserDto user = new UserDto();
 
+        when(commentRepo.getCommentByUserId(1)).thenReturn(comments);
+        when(userService.getUserDtoById(1)).thenReturn(user);
+
+        UserCommentsDto userComments = commentService.getUserCommentDtoById(1);
+
+        assertEquals(comments, userComments.getCommentList());
+        assertEquals(user, userComments.getUser());
+    }
+    @Test
+    @DisplayName("Get comment by user id - no comments")
+    public void commentService_getCommentsByUserId_ThrowsUserNotFound(){
+        List<Comment> comments = new ArrayList<>();
+        UserDto user = new UserDto();
+
+        when(commentRepo.getCommentByUserId(1)).thenReturn(comments);
+        when(userService.getUserDtoById(1)).thenReturn(user);
+
+        UserCommentsDto userComments = commentService.getUserCommentDtoById(1);
+
+        assertEquals(0, userComments.getCommentList().size());
+        assertEquals(user, userComments.getUser());
+    }
+    @Test
+    @DisplayName("Delete comment")
+    public void commentService_deleteComment_callsRepositoryDeleteComment(){
+        commentService.deleteComment(1);
+        verify(commentRepo, times(1)).deleteComment(1);
     }
 }
