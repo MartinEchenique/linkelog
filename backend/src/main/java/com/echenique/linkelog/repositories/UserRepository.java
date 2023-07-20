@@ -38,20 +38,29 @@ public class UserRepository implements UserRepositoryInterface {
     @Override
     public UserProfile getProfileById(int id){
         String sql = "SELECT * from profile p WHERE p.userid = ? " ;
-        List<UserProfile> users= jdbcTemplate.query(sql, new UserRowMapper(), id);
-        return users.get(0);
+        return jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+
     }
+
+    @Override
+    public UserProfile getProfileByUsername(String username) {
+        String sql = "SELECT * from profile p WHERE p.username = ? " ;
+        return jdbcTemplate.queryForObject(sql, new UserRowMapper(), username);
+    }
+
     private class UserRowMapper implements RowMapper<UserProfile> {
 
         @Override
         public UserProfile mapRow(ResultSet rs, int rowNum) throws SQLException {
-            int id = rs.getInt(1);
-            String firstName = rs.getString(2);
-            String lastName = rs.getString(3);
-            String companyName = rs.getString(4);
-            String profilePictureUrl = rs.getString(5);
-            String role = rs.getString(6);
-          return  new UserProfile(id ,firstName, lastName ,companyName,profilePictureUrl, role);
+            int id = rs.getInt("userid");
+            String firstName = rs.getString("firstname");
+            String lastName = rs.getString("lastname");
+            String companyName = rs.getString("companyname");
+            String profilePictureUrl = rs.getString("profilepictureurl");
+            String role = rs.getString("userrole");
+            String username = rs.getString("username");
+            String pass = rs.getString("password");
+          return  new UserProfile(id ,firstName, lastName ,companyName,profilePictureUrl, role, username, pass);
         }
     }
     

@@ -7,30 +7,18 @@ public class UserProfile {
     private String companyName;
     private String profilePictureUrl;
     private String role;
+    private String username;
+    private String password;
 
-
-    public UserProfile(){};
-    public UserProfile(int userId, String firstName, String lastName) {
+    public UserProfile(int userId, String firstName, String lastName, String companyName, String profilePictureUrl, String role, String username, String password) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.companyName = "";
-        this.profilePictureUrl = "";
-        this.role = "";
-    }
-
-    public UserProfile(int userId, String firstName, String lastName, String companyName) {
-        this(userId, firstName, lastName);
         this.companyName = companyName;
-        this.profilePictureUrl = "";
-        this.role = "";
-    }
-
-    public UserProfile(int userId, String firstName,
-                       String lastName, String companyName, String profilePictureUrl, String role) {
-        this(userId, firstName, lastName, companyName);
         this.profilePictureUrl = profilePictureUrl;
         this.role = role;
+        this.username = username;
+        this.password = password;
     }
 
     public void setUserId(int userId) {
@@ -79,5 +67,21 @@ public class UserProfile {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

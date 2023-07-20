@@ -1,13 +1,12 @@
 package com.echenique.linkelog.controllers;
 
-import com.echenique.linkelog.dto.PostDto;
+import com.echenique.linkelog.dto.PostWithCommentsDto;
 import com.echenique.linkelog.models.Post;
 import com.echenique.linkelog.repositories.PostRepositoryInteface;
 import com.echenique.linkelog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 @CrossOrigin("http://localhost:4200")
 @RestController
@@ -24,24 +23,24 @@ public class PostController {
     }
 
     @GetMapping(value = "/postComplete/{id}")
-    public PostDto getCompletePostById(@PathVariable int id){
-        PostDto postToReturn = postService.getCompletePost(id);
+    public PostWithCommentsDto getCompletePostById(@PathVariable int id){
+        PostWithCommentsDto postToReturn = postService.getPostWithComments(id);
         return postToReturn;
     }
 
     @GetMapping(value="/allPosts")
-    public  List<PostDto> getAllPost(){
-        List<PostDto> posts = postService.getLastPosts();
+    public  List<PostWithCommentsDto> getAllPost(){
+        List<PostWithCommentsDto> posts = postService.getLastPostsWithComments();
         return posts;
     }
 
     @GetMapping(value="/postPage/{page}")
-    public List<PostDto> getPostPage(@PathVariable int page){
-        return postService.getPostsPage(page);
+    public List<PostWithCommentsDto> getPostPage(@PathVariable int page){
+        return postService.getPostsWithCommentsByPage(page);
         }
 
     @PostMapping(value="/post/add")
-    public void addPost(@RequestBody PostDto post){
+    public void addPost(@RequestBody PostWithCommentsDto post){
         this.postService.addNewPost(post);
     }
 

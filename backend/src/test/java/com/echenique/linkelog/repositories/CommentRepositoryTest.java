@@ -55,7 +55,7 @@ class CommentRepositoryTest {
     public void commentRepository_getCommentById_returnsNullIfIdDoesntExist(){
         boolean isOptionalEmpty = commentRepository.getCommentById(-1).isEmpty();
 
-        assertEquals(true,isOptionalEmpty);
+        assertTrue(isOptionalEmpty);
 
     }
 

@@ -9,6 +9,7 @@ public class Comment {
     private Timestamp fechaPublicacion;
     private int commentId;
     private int postId;
+
     public Comment(){
     }
 

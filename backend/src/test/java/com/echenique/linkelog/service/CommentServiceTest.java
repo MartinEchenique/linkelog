@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Timestamp;
@@ -60,13 +61,13 @@ class CommentServiceTest {
         Optional<Comment> optionalComment = Optional.of(comment);
         CommentDto dto = new CommentDto(user, "comment text", now, 1,1);
 
-        CommentService commentService1 = spy(commentService);
 
+        CommentService commentServiceMock = spy(new CommentService(userService, commentRepo));
 
         when(commentRepo.getCommentById(1)).thenReturn(optionalComment);
-        when(commentService1.getCommentDto(comment)).thenReturn(dto);
+        when(commentServiceMock.getCommentDto(comment)).thenReturn(dto);
 
-        CommentDto commentDto= commentService1.getCommentDtoById(1);
+        CommentDto commentDto= commentServiceMock.getCommentDtoById(1);
 
         assertEquals(dto, commentDto);
     }
@@ -77,6 +78,7 @@ class CommentServiceTest {
         when(commentRepo.getCommentById(1)).thenReturn(optionalComment);
         assertThrows(CommentNotFound.class,() ->  commentService.getCommentDtoById(1));
     }
+
     @Test
     public void commentService_getCommentsByPostId(){
         UserDto user = new UserDto();
@@ -86,13 +88,13 @@ class CommentServiceTest {
         CommentDto dto = new CommentDto(user, "comment text", now, 1,1);
         CommentDto dto1 = new CommentDto(user, "comment text", now, 1,1);
 
-        CommentService commentService1 = spy(commentService);
+        CommentService commentServiceMock = spy(new CommentService(userService, commentRepo));
 
         when(commentRepo.getCommentsByPostId(1)).thenReturn(List.of(comment,comment1));
-        when(commentService1.getCommentDto(comment)).thenReturn(dto);
-        when(commentService1.getCommentDto(comment1)).thenReturn(dto1);
+        when(commentServiceMock.getCommentDto(comment)).thenReturn(dto);
+        when(commentServiceMock.getCommentDto(comment1)).thenReturn(dto1);
 
-        List<CommentDto> comments = commentService1.getCommentsByPostId(1);
+        List<CommentDto> comments = commentServiceMock.getCommentsByPostId(1);
 
         assertEquals(2, comments.size());
         assertEquals(dto, comments.get(0));
@@ -102,19 +104,19 @@ class CommentServiceTest {
     @Test
     public void commentService_addComment_throwsCommentLimitReached(){
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        AddCommentDto dto = new AddCommentDto(1,"comment text", now,4);
+        AddCommentDto dto = new AddCommentDto("comment text", 4);
 
         when(commentRepo.countComments(4)).thenReturn(20);
-        assertThrows(CommentLimitReached.class,() -> commentService.addComment(dto));
+        assertThrows(CommentLimitReached.class,() -> commentService.addComment(dto,1));
     }
     @Test
     public void commentService_addComment_callsRepositoryAddComment(){
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        AddCommentDto dto = new AddCommentDto(1,"comment text", now,4);
+
+        AddCommentDto dto = new AddCommentDto("comment text", 4);
 
         when(commentRepo.countComments(4)).thenReturn(19);
-        commentService.addComment(dto);
-        verify(commentRepo, times(1)).addComment(4,"comment text", 1, now);
+        commentService.addComment(dto, 1);
+        verify(commentRepo, times(1)).addComment(eq(4),eq("comment text"), eq(1), any(Timestamp.class));
     }
     @Test
     @DisplayName("Get comment by user id - 3 comments")

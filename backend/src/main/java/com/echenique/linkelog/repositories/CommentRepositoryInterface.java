@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepositoryInterface {
-    public int addComment(int postId, String commentText, int authorId, Timestamp pubDate);
-    public Optional<Comment> getCommentById(int id);
-    public List<Comment> getCommentsByPostId(int id);
-    public int countComments(int postId);
+    int addComment(int postId, String commentText, int authorId, Timestamp pubDate);
+    Optional<Comment> getCommentById(int id);
+    List<Comment> getCommentsByPostId(int id);
+    int countComments(int postId);
 
     List<Comment> getCommentByUserId(int userId);
 

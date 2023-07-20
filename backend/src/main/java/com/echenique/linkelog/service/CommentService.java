@@ -8,19 +8,23 @@ import com.echenique.linkelog.exceptions.CommentLimitReached;
 import com.echenique.linkelog.exceptions.CommentNotFound;
 import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.repositories.CommentRepositoryInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CommentService {
     private static final int COMMENT_LIMIT = 20;
-    @Autowired
-    UserService userService;
-    @Autowired
-    CommentRepositoryInterface commentRepo;
+    private final UserService  userService;
+    private final CommentRepositoryInterface commentRepo;
+    public CommentService(UserService userService, CommentRepositoryInterface commentRepo){
+        this.userService = userService;
+        this.commentRepo = commentRepo;
+    }
+
     public CommentDto getCommentDto(Comment comment){
         UserDto user = userService.getUserDtoById(comment.getAutor());
         return new CommentDto(user, comment.getTexto(), comment.getFechaPublicacion(), comment.getPostId(), comment.getCommentId());
@@ -39,10 +43,11 @@ public class CommentService {
         }
         return commentList;
     }
-
-    public void addComment(AddCommentDto comment) throws CommentLimitReached{
-       if(commentRepo.countComments(comment.getPostId()) < COMMENT_LIMIT){
-           commentRepo.addComment(comment.getPostId(),comment.getTexto(),comment.getAutorId(),comment.getFechaPublicacion());
+    @Transactional
+    public void addComment(AddCommentDto comment, int authorId) throws CommentLimitReached{
+        Timestamp commentDate = new Timestamp(System.currentTimeMillis());
+        if(commentRepo.countComments(comment.getPostId()) < COMMENT_LIMIT){
+           commentRepo.addComment(comment.getPostId(),comment.getTexto(), authorId,commentDate);
        }else{
            throw new CommentLimitReached();
        }

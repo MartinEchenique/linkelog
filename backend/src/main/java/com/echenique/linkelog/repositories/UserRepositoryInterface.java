@@ -8,4 +8,6 @@ public interface UserRepositoryInterface {
     void addNewProfile(String firstName, String lastName, String companyName, String profilePictureUrl, String role);
 
     UserProfile getProfileById(int id);
+
+    UserProfile getProfileByUsername(String username);
 }

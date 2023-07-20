@@ -1,7 +1,7 @@
 package com.echenique.linkelog.service;
 
 import com.echenique.linkelog.dto.CommentDto;
-import com.echenique.linkelog.dto.PostDto;
+import com.echenique.linkelog.dto.PostWithCommentsDto;
 import com.echenique.linkelog.dto.UserDto;
 import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.models.Post;
@@ -26,7 +26,7 @@ public class PostService {
     @Autowired
     private UserService userService;
 
-    public PostDto getCompletePost(int postId){
+    public PostWithCommentsDto getPostWithComments(int postId){
         Post post = postRepo.getPostById(postId);
         List<Comment> comments = commentRepo.getCommentsByPostId(postId);
 
@@ -37,9 +37,9 @@ public class PostService {
             commentsDto.add(commentService.getCommentDto(comment));
         }
 
-        return new PostDto(userDto, commentsDto, post.getFechaPublicacion(), new ArrayList(), Integer.toString(post.getPostId()),post.getPostText(), post.getPostImgUrl());
+        return new PostWithCommentsDto(userDto, commentsDto, post.getFechaPublicacion(), new ArrayList(), Integer.toString(post.getPostId()),post.getPostText(), post.getPostImgUrl());
     }
-    public PostDto getCompletePost(Post post){
+    public PostWithCommentsDto getPostWithComments(Post post){
         List<Comment> comments = commentRepo.getCommentsByPostId(post.getPostId());
 
         UserDto userDto = userService.getUserDtoById(post.getAutorId());
@@ -49,26 +49,29 @@ public class PostService {
             commentsDto.add(commentService.getCommentDto(comment));
         }
 
-        return new PostDto(userDto, commentsDto, post.getFechaPublicacion(), new ArrayList(), Integer.toString(post.getPostId()),post.getPostText(), post.getPostImgUrl());
+        return new PostWithCommentsDto(userDto, commentsDto, post.getFechaPublicacion(), new ArrayList(), Integer.toString(post.getPostId()),post.getPostText(), post.getPostImgUrl());
     }
-    public List<PostDto> getLastPosts(){
+    public List<PostWithCommentsDto> getLastPostsWithComments(){
         List<Post> posts = postRepo.getAllPosts();
-        List<PostDto> postDtos = new ArrayList<PostDto>();
+        List<PostWithCommentsDto> postWithCommentsDtos = new ArrayList<PostWithCommentsDto>();
         for (Post post:posts
              ) {
-            postDtos.add(this.getCompletePost(post));
+            postWithCommentsDtos.add(this.getPostWithComments(post));
         }
-        return postDtos;
+        return postWithCommentsDtos;
     }
-    public void addNewPost(PostDto post){
+    public void addNewPost(PostWithCommentsDto post){
        this.postRepo.addNewPost(post.getAutor().getUserId(), post.getText(), post.getImg(), post.getFechaPublicacion());
     }
-    public List<PostDto> getPostsPage(int page){
-        List<PostDto> posts = new ArrayList<PostDto>();
+    public List<PostWithCommentsDto> getPostsWithCommentsByPage(int page){
+        List<PostWithCommentsDto> posts = new ArrayList<PostWithCommentsDto>();
         for (Post post:postRepo.getPostPageDecendentOrder(5, page)
              ) {
-                    posts.add(this.getCompletePost(post));
+                    posts.add(this.getPostWithComments(post));
         }
         return posts;
+    }
+    public Post getPostById(int postId){
+        return postRepo.getPostById(postId);
     }
 }
