@@ -1,25 +1,32 @@
 package com.echenique.linkelog.dto;
 
-import java.sql.Timestamp;
-
 public class AddCommentDto {
-    private String texto;
+    private String text;
     private int postId;
+    private int authorId;
 
     public AddCommentDto() {
     }
 
-    public AddCommentDto(String texto, int postId) {
-        this.texto = texto;
+    public AddCommentDto(String text, int postId, int authorId) {
+        this.text = text;
         this.postId = postId;
+        this.authorId = authorId;
     }
 
-    public String getTexto() {
-        return texto;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getPostId() {

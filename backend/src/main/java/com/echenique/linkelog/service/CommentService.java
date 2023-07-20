@@ -1,14 +1,12 @@
 package com.echenique.linkelog.service;
 
-import com.echenique.linkelog.dto.AddCommentDto;
-import com.echenique.linkelog.dto.CommentDto;
-import com.echenique.linkelog.dto.UserCommentsDto;
-import com.echenique.linkelog.dto.UserDto;
+import com.echenique.linkelog.dto.*;
 import com.echenique.linkelog.exceptions.CommentLimitReached;
 import com.echenique.linkelog.exceptions.CommentNotFound;
 import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.repositories.CommentRepositoryInterface;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
@@ -18,8 +16,10 @@ import java.util.List;
 @Service
 public class CommentService {
     private static final int COMMENT_LIMIT = 20;
+
     private final UserService  userService;
     private final CommentRepositoryInterface commentRepo;
+
     public CommentService(UserService userService, CommentRepositoryInterface commentRepo){
         this.userService = userService;
         this.commentRepo = commentRepo;
@@ -43,11 +43,12 @@ public class CommentService {
         }
         return commentList;
     }
-    @Transactional
-    public void addComment(AddCommentDto comment, int authorId) throws CommentLimitReached{
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void addComment(AddCommentDto comment) throws CommentLimitReached{
         Timestamp commentDate = new Timestamp(System.currentTimeMillis());
         if(commentRepo.countComments(comment.getPostId()) < COMMENT_LIMIT){
-           commentRepo.addComment(comment.getPostId(),comment.getTexto(), authorId,commentDate);
+           commentRepo.addComment(comment.getPostId(),comment.getText(), comment.getAuthorId(),commentDate);
        }else{
            throw new CommentLimitReached();
        }
@@ -61,5 +62,9 @@ public class CommentService {
 
     public void deleteComment(int commentId) {
         commentRepo.deleteComment(commentId);
+    }
+
+    public void editComment(EditCommentDto comment){
+        commentRepo.editComment(comment.getText(), comment.getCommentId());
     }
 }

@@ -1,10 +1,7 @@
 package com.echenique.linkelog.service;
 
 
-import com.echenique.linkelog.dto.AddCommentDto;
-import com.echenique.linkelog.dto.CommentDto;
-import com.echenique.linkelog.dto.UserCommentsDto;
-import com.echenique.linkelog.dto.UserDto;
+import com.echenique.linkelog.dto.*;
 import com.echenique.linkelog.exceptions.CommentLimitReached;
 import com.echenique.linkelog.exceptions.CommentNotFound;
 import com.echenique.linkelog.models.Comment;
@@ -14,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Timestamp;
@@ -53,6 +49,7 @@ class CommentServiceTest {
         assertEquals(1,commentDto.getPostId(), "Incorrect post ID");
         assertEquals(1,commentDto.getCommentId(), "Incorrect comment ID");
     }
+
     @Test
     public void commentService_getCommentDtoById_returnsDtoFromId(){
         UserDto user = new UserDto();
@@ -71,6 +68,7 @@ class CommentServiceTest {
 
         assertEquals(dto, commentDto);
     }
+
     @Test
     public void commentService_getCommentDtoById_throwsIfNotFound(){
         Optional<Comment> optionalComment = Optional.empty();
@@ -101,23 +99,26 @@ class CommentServiceTest {
         assertEquals(dto1, comments.get(1));
 
     }
+
     @Test
     public void commentService_addComment_throwsCommentLimitReached(){
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        AddCommentDto dto = new AddCommentDto("comment text", 4);
+        AddCommentDto dto = new AddCommentDto("comment text", 4, 1);
 
         when(commentRepo.countComments(4)).thenReturn(20);
-        assertThrows(CommentLimitReached.class,() -> commentService.addComment(dto,1));
+        assertThrows(CommentLimitReached.class,() -> commentService.addComment(dto));
     }
+
     @Test
     public void commentService_addComment_callsRepositoryAddComment(){
 
-        AddCommentDto dto = new AddCommentDto("comment text", 4);
+        AddCommentDto dto = new AddCommentDto("comment text", 4, 1);
 
         when(commentRepo.countComments(4)).thenReturn(19);
-        commentService.addComment(dto, 1);
+        commentService.addComment(dto);
         verify(commentRepo, times(1)).addComment(eq(4),eq("comment text"), eq(1), any(Timestamp.class));
     }
+
     @Test
     @DisplayName("Get comment by user id - 3 comments")
     public void commentService_getCommentsByUserId_returnCommentsDto(){
@@ -132,6 +133,7 @@ class CommentServiceTest {
         assertEquals(comments, userComments.getCommentList());
         assertEquals(user, userComments.getUser());
     }
+
     @Test
     @DisplayName("Get comment by user id - no comments")
     public void commentService_getCommentsByUserId_ThrowsUserNotFound(){
@@ -146,10 +148,19 @@ class CommentServiceTest {
         assertEquals(0, userComments.getCommentList().size());
         assertEquals(user, userComments.getUser());
     }
+
     @Test
     @DisplayName("Delete comment")
     public void commentService_deleteComment_callsRepositoryDeleteComment(){
         commentService.deleteComment(1);
         verify(commentRepo, times(1)).deleteComment(1);
+    }
+
+    @Test
+    @DisplayName("Edit comment")
+    public void commentService_editComment_commentIsEdited(){
+        EditCommentDto dto = new EditCommentDto("commentService_editComment_commentIsEdited", 1);
+        commentService.editComment(dto);
+        verify(commentRepo, times(1)).editComment("commentService_editComment_commentIsEdited", 1);
     }
 }

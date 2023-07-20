@@ -68,6 +68,12 @@ public class CommentRepository implements CommentRepositoryInterface {
         return jdbcTemplate.update(sql, commentId);
     }
 
+    @Override
+    public void editComment(String newText, int id) {
+        String sql = "UPDATE comments SET commenttext = ? WHERE commentid=?";
+        jdbcTemplate.update(sql, newText, id);
+    }
+
     public class CommentMapper implements RowMapper<Comment>{
 
         @Override

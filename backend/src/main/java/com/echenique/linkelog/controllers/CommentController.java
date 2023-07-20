@@ -3,6 +3,7 @@ package com.echenique.linkelog.controllers;
 import com.echenique.linkelog.dto.AddCommentDto;
 import com.echenique.linkelog.dto.CommentDto;
 
+import com.echenique.linkelog.dto.EditCommentDto;
 import com.echenique.linkelog.security.LoggedUserHelper;
 import com.echenique.linkelog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,10 @@ public class CommentController {
     @PostMapping(path="/add")
     public void addComment(@RequestBody AddCommentDto comment){
       int userId = LoggedUserHelper.getLoggedId();
-        commentService.addComment(comment, userId);
+      comment.setAuthorId(userId);
+      commentService.addComment(comment);
     }
+
     @PreAuthorize("""
             @commentAuthorizeCondition.loggedUserOwnsComment(#id) || 
             @commentAuthorizeCondition.loggedUserOwnsPost(#id)
@@ -39,5 +42,10 @@ public class CommentController {
     @DeleteMapping(path="/remove/{id}")
     public void deleteComment(@PathVariable int id){
         commentService.deleteComment(id);
+    }
+    @PreAuthorize("@commentAuthorizeCondition.loggedUserOwnsComment(#edit.getCommentId())")
+    @PutMapping("/edit")
+    public void editComment(@RequestBody EditCommentDto edit){
+        commentService.editComment(edit);
     }
 }

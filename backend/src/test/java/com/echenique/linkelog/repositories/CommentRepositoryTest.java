@@ -125,4 +125,12 @@ class CommentRepositoryTest {
         assertTrue(commentRepository.getCommentById(100).isEmpty());
     }
 
+    @Test
+    @DisplayName("Edit comment")
+    public void commentRepository_editComment_modifiesCommentText(){
+        commentRepository.editComment("Succes", 1);
+        String newText = commentRepository.getCommentById(1).get().getTexto();
+        assertEquals("Succes", newText);
+    }
+
 }

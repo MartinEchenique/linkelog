@@ -15,4 +15,6 @@ public interface CommentRepositoryInterface {
     List<Comment> getCommentByUserId(int userId);
 
     int deleteComment(int commentId);
+
+    void editComment(String newText, int id);
 }

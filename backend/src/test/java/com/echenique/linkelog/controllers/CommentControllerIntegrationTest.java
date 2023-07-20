@@ -61,8 +61,7 @@ class CommentControllerIntegrationTest {
     @Test
     public void commentController_postComment_returnOkStatus() throws Exception {
         ObjectMapper om = new ObjectMapper();
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        AddCommentDto comment = new AddCommentDto( "comment text",  1);
+        AddCommentDto comment = new AddCommentDto( "comment text",  1,10);
 
         mockMvc.perform(
                         post("/comments/add")
