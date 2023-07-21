@@ -1,77 +1,66 @@
 package com.echenique.linkelog.service;
 
-import com.echenique.linkelog.dto.CommentDto;
-import com.echenique.linkelog.dto.PostWithCommentsDto;
-import com.echenique.linkelog.dto.UserDto;
-import com.echenique.linkelog.models.Comment;
+import com.echenique.linkelog.dto.*;
 import com.echenique.linkelog.models.Post;
-import com.echenique.linkelog.repositories.CommentRepositoryInterface;
 import com.echenique.linkelog.repositories.PostRepositoryInteface;
-import com.echenique.linkelog.repositories.UserRepositoryInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class PostService {
-    @Autowired
-    private PostRepositoryInteface postRepo;
-    @Autowired
-    private CommentRepositoryInterface commentRepo;
-    @Autowired
-    private UserRepositoryInterface userRepo;
-    @Autowired
-    private CommentService commentService;
-    @Autowired
-    private UserService userService;
 
-    public PostWithCommentsDto getPostWithComments(int postId){
+    private final PostRepositoryInteface postRepo;
+    private final CommentService commentService;
+    private final UserService userService;
+    private final int DEFAULT_PAGE_SIZE = 5;
+    public PostService(PostRepositoryInteface postRepo, CommentService commentService, UserService userService) {
+        this.postRepo = postRepo;
+        this.commentService = commentService;
+        this.userService = userService;
+    }
+
+    public PostWithCommentsDto getPostWithCommentsById(int postId){
         Post post = postRepo.getPostById(postId);
-        List<Comment> comments = commentRepo.getCommentsByPostId(postId);
-
-        UserDto userDto = userService.getUserDtoById(post.getAutorId());
-        List<CommentDto> commentsDto = new ArrayList<>();
-        for (Comment comment : comments
-             ) {
-            commentsDto.add(commentService.getCommentDto(comment));
-        }
-
-        return new PostWithCommentsDto(userDto, commentsDto, post.getFechaPublicacion(), new ArrayList(), Integer.toString(post.getPostId()),post.getPostText(), post.getPostImgUrl());
+        return this.getPostWithCommentsById(post);
     }
-    public PostWithCommentsDto getPostWithComments(Post post){
-        List<Comment> comments = commentRepo.getCommentsByPostId(post.getPostId());
-
+    public PostWithCommentsDto getPostWithCommentsById(Post post){
+        List<CommentDto> comments = commentService.getCommentsByPostId(post.getPostId());
         UserDto userDto = userService.getUserDtoById(post.getAutorId());
-        List<CommentDto> commentsDto = new ArrayList<>();
-        for (Comment comment : comments
-        ) {
-            commentsDto.add(commentService.getCommentDto(comment));
-        }
-
-        return new PostWithCommentsDto(userDto, commentsDto, post.getFechaPublicacion(), new ArrayList(), Integer.toString(post.getPostId()),post.getPostText(), post.getPostImgUrl());
+        return new PostWithCommentsDto(userDto, comments, post.getFechaPublicacion(), new ArrayList(), post.getPostId(),post.getPostText(), post.getPostImgUrl());
     }
-    public List<PostWithCommentsDto> getLastPostsWithComments(){
+    public List<PostWithCommentsDto> getAllPostsWithComments(){
         List<Post> posts = postRepo.getAllPosts();
-        List<PostWithCommentsDto> postWithCommentsDtos = new ArrayList<PostWithCommentsDto>();
-        for (Post post:posts
-             ) {
-            postWithCommentsDtos.add(this.getPostWithComments(post));
-        }
+        List<PostWithCommentsDto> postWithCommentsDtos = posts.stream()
+                                                        .map(post -> this.getPostWithCommentsById(post))
+                                                        .toList();
         return postWithCommentsDtos;
     }
-    public void addNewPost(PostWithCommentsDto post){
-       this.postRepo.addNewPost(post.getAutor().getUserId(), post.getText(), post.getImg(), post.getFechaPublicacion());
+    public void addNewPost(AddPostDto post){
+        Timestamp postDate = new Timestamp(System.currentTimeMillis());
+        postRepo.addNewPost(post.getAuthorId(), post.getText(), post.getImg(), postDate);
     }
-    public List<PostWithCommentsDto> getPostsWithCommentsByPage(int page){
-        List<PostWithCommentsDto> posts = new ArrayList<PostWithCommentsDto>();
-        for (Post post:postRepo.getPostPageDecendentOrder(5, page)
-             ) {
-                    posts.add(this.getPostWithComments(post));
-        }
+    public List<PostWithCommentsDto> getPostsWithCommentsByPageDesc(int page){
+        List<PostWithCommentsDto> posts = postRepo.getPostPageDescDate(DEFAULT_PAGE_SIZE, page)
+                                                    .stream()
+                                                    .map(post -> getPostWithCommentsById(post))
+                                                    .toList();
         return posts;
     }
-    public Post getPostById(int postId){
-        return postRepo.getPostById(postId);
+    public List<PostWithCommentsDto> getPostsWithCommentsByPageDesc(int page, int pageSize){
+        List<PostWithCommentsDto> posts = postRepo.getPostPageDescDate(pageSize, page)
+                .stream()
+                .map(post -> getPostWithCommentsById(post))
+                .toList();
+        return posts;
+    }
+    public PostDto getPostById(int postId){
+        Post post = postRepo.getPostById(postId);
+        int numberOfComments = commentService.getNumberOfCommentByPostId(post.getPostId());
+        return new PostDto(post.getAutorId(), post.getPostId(),
+                post.getPostText(), post.getPostImgUrl(),
+                post.getFechaPublicacion(),numberOfComments);
     }
 }

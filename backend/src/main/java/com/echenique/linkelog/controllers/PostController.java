@@ -1,5 +1,6 @@
 package com.echenique.linkelog.controllers;
 
+import com.echenique.linkelog.dto.AddPostDto;
 import com.echenique.linkelog.dto.PostWithCommentsDto;
 import com.echenique.linkelog.models.Post;
 import com.echenique.linkelog.repositories.PostRepositoryInteface;
@@ -24,23 +25,23 @@ public class PostController {
 
     @GetMapping(value = "/postComplete/{id}")
     public PostWithCommentsDto getCompletePostById(@PathVariable int id){
-        PostWithCommentsDto postToReturn = postService.getPostWithComments(id);
+        PostWithCommentsDto postToReturn = postService.getPostWithCommentsById(id);
         return postToReturn;
     }
 
     @GetMapping(value="/allPosts")
     public  List<PostWithCommentsDto> getAllPost(){
-        List<PostWithCommentsDto> posts = postService.getLastPostsWithComments();
+        List<PostWithCommentsDto> posts = postService.getAllPostsWithComments();
         return posts;
     }
 
     @GetMapping(value="/postPage/{page}")
     public List<PostWithCommentsDto> getPostPage(@PathVariable int page){
-        return postService.getPostsWithCommentsByPage(page);
+        return postService.getPostsWithCommentsByPageDesc(page);
         }
 
     @PostMapping(value="/post/add")
-    public void addPost(@RequestBody PostWithCommentsDto post){
+    public void addPost(@RequestBody AddPostDto post){
         this.postService.addNewPost(post);
     }
 

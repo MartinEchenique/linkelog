@@ -27,12 +27,6 @@ CREATE TABLE post (
     pubdate TIMESTAMP NOT NULL,
     FOREIGN KEY (userprofileid) REFERENCES profile(userid)
 );
--- mock data for post
-insert into post (userprofileid, posttext, postimgurl, pubdate)
-    values (1, 'Post 1', 'img_url', '2000-01-01 00:00:01'),
-            (2, 'Post 2', 'img_url', '2000-01-01 00:00:02'),
-            (3, 'Post 3', 'img_url', '2000-01-01 00:00:03'),
-            (4, 'Post 4', 'img_url', '2000-01-01 00:00:04');
 
 -- Create comments table
 CREATE TABLE comments (

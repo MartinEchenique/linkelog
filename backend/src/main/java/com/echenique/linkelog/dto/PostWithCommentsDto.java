@@ -4,18 +4,18 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class PostWithCommentsDto {
-    UserDto autor;
-    List<CommentDto> comentarios;
-    Timestamp fechaPublicacion;
-    List reacciones;
-    String id;
-    String text;
-    String img;
+    private UserDto autor;
+    private List<CommentDto> comentarios;
+    private Timestamp fechaPublicacion;
+    private List reacciones;
+    private int id;
+    private String text;
+    private String img;
 
     public PostWithCommentsDto() {
     }
 
-    public PostWithCommentsDto(UserDto autor, List<CommentDto> comentarios, Timestamp fechaPublicacion, List reacciones, String id, String text, String img) {
+    public PostWithCommentsDto(UserDto autor, List<CommentDto> comentarios, Timestamp fechaPublicacion, List reacciones, int id, String text, String img) {
         this.autor = autor;
         this.comentarios = comentarios;
         this.fechaPublicacion = fechaPublicacion;
@@ -57,11 +57,11 @@ public class PostWithCommentsDto {
         this.reacciones = reacciones;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

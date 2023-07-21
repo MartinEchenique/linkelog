@@ -29,10 +29,12 @@ CREATE TABLE post (
 );
 -- mock data for post
 insert into post (userprofileid, posttext, postimgurl, pubdate)
-    values (1, 'Post 1', 'img_url', '1-2-12'),
-            (2, 'Post 2', 'img_url', '2-2-12'),
-            (3, 'Post 3', 'img_url', '3-2-12'),
-            (4, 'Post 4', 'img_url', '4-2-12');
+    values (1, 'Post 1', 'img_url', '2000-01-01 00:00:01.0'),
+            (2, 'Post 2', 'img_url', '2000-01-01 00:00:02.0'),
+            (3, 'Post 3', 'img_url', '2000-01-01 00:00:03.0'),
+            (4, 'Post 4', 'img_url', '2000-01-01 00:00:04.0'),
+            (1, 'Post 5', 'img_url', '2000-01-01 00:00:05.0'),
+            (1, 'Post 6', 'img_url', '2000-01-01 00:00:06.0');
 
 -- Create comments table
 CREATE TABLE comments (

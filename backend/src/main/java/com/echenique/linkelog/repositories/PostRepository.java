@@ -18,10 +18,6 @@ import java.util.List;
 public class PostRepository implements PostRepositoryInteface {
     @Autowired
     JdbcTemplate jdbcTemplate;
-    @Override
-    public void addNewPost(Post post) {
-
-    }
 
     @Override
     public void addNewPost(int userId, String postText, String postImgUrl, Timestamp postDate) {
@@ -46,11 +42,11 @@ public class PostRepository implements PostRepositoryInteface {
         return jdbcTemplate.query(sql,new PostMapper());
     }
 
-    public List<Post> getPostPageDecendentOrder(int pageSize, int pageNumber){
+    public List<Post> getPostPageDescDate(int pageSize, int pageNumber){
         String sql = "SELECT * FROM post p ORDER BY pubdate DESC LIMIT ? OFFSET ? ";
         return jdbcTemplate.query(sql, new PostMapper(), pageSize, pageNumber*pageSize);
     }
-    public List<Post> getPostPageAscendentOrder(int pageSize, int pageNumber){
+    public List<Post> getPostPageAscDate(int pageSize, int pageNumber){
         String sql = "SELECT * FROM post p ORDER BY pubdate ASC LIMIT ? OFFSET ? ";
         return jdbcTemplate.query(sql, new PostMapper(), pageSize, pageNumber*pageSize);
     }

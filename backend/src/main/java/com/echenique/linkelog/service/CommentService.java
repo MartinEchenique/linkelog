@@ -24,17 +24,14 @@ public class CommentService {
         this.userService = userService;
         this.commentRepo = commentRepo;
     }
-
     public CommentDto getCommentDto(Comment comment){
         UserDto user = userService.getUserDtoById(comment.getAutor());
         return new CommentDto(user, comment.getTexto(), comment.getFechaPublicacion(), comment.getPostId(), comment.getCommentId());
     }
-
     public CommentDto getCommentDtoById(int id) {
         Comment comment = commentRepo.getCommentById(id).orElseThrow(CommentNotFound::new);
         return this.getCommentDto(comment);
     }
-
     public List<CommentDto> getCommentsByPostId(int postId){
         List<CommentDto> commentList = new ArrayList<CommentDto>();
         for (Comment comment: commentRepo.getCommentsByPostId(postId))
@@ -43,28 +40,27 @@ public class CommentService {
         }
         return commentList;
     }
-
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void addComment(AddCommentDto comment) throws CommentLimitReached{
         Timestamp commentDate = new Timestamp(System.currentTimeMillis());
-        if(commentRepo.countComments(comment.getPostId()) < COMMENT_LIMIT){
+        if( getNumberOfCommentByPostId(comment.getPostId()) < COMMENT_LIMIT){
            commentRepo.addComment(comment.getPostId(),comment.getText(), comment.getAuthorId(),commentDate);
        }else{
            throw new CommentLimitReached();
        }
     }
-
     public UserCommentsDto getUserCommentDtoById(int userId) {
         UserDto user = userService.getUserDtoById(userId);
         List<Comment> comments = commentRepo.getCommentByUserId(userId);
         return new UserCommentsDto(user,comments);
     }
-
     public void deleteComment(int commentId) {
         commentRepo.deleteComment(commentId);
     }
-
     public void editComment(EditCommentDto comment){
         commentRepo.editComment(comment.getText(), comment.getCommentId());
+    }
+    public int getNumberOfCommentByPostId(int postId){
+        return commentRepo.countComments(postId);
     }
 }
