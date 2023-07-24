@@ -1,6 +1,10 @@
 package com.echenique.linkelog.service;
 
 import com.echenique.linkelog.dto.*;
+import com.echenique.linkelog.dto.commentDto.CommentDto;
+import com.echenique.linkelog.dto.postDto.AddPostDto;
+import com.echenique.linkelog.dto.postDto.PostDto;
+import com.echenique.linkelog.dto.postDto.PostWithCommentsDto;
 import com.echenique.linkelog.models.Post;
 import com.echenique.linkelog.repositories.PostRepository;
 import org.junit.jupiter.api.DisplayName;

@@ -50,6 +50,24 @@ public class PostRepository implements PostRepositoryInteface {
         String sql = "SELECT * FROM post p ORDER BY pubdate ASC LIMIT ? OFFSET ? ";
         return jdbcTemplate.query(sql, new PostMapper(), pageSize, pageNumber*pageSize);
     }
+
+    @Override
+    public int deletePost(int id) {
+        String sql = "DELETE FROM post p WHERE p.id=?";
+        return jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public int editPostImg(String newImg, int id) {
+        return 0;
+    }
+
+    @Override
+    public int editPostText(String newText, int id) {
+        return 0;
+    }
+
+
     private class PostMapper implements RowMapper<Post> {
 
         @Override

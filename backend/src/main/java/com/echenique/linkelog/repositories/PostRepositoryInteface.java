@@ -11,7 +11,10 @@ public interface PostRepositoryInteface {
     Post getPostById(int id);
     List<Post> getPostsByUserId(int id);
     List<Post> getAllPosts();
-
     List<Post> getPostPageDescDate(int pageSize, int pageNumber);
     List<Post> getPostPageAscDate(int pageSize, int pageNumber);
+
+    int deletePost(int id);
+    int editPostImg(String newImg, int id);
+    int editPostText(String newText, int id);
 }

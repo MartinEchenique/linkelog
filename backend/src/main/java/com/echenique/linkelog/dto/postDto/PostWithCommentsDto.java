@@ -1,4 +1,7 @@
-package com.echenique.linkelog.dto;
+package com.echenique.linkelog.dto.postDto;
+
+import com.echenique.linkelog.dto.UserDto;
+import com.echenique.linkelog.dto.commentDto.CommentDto;
 
 import java.sql.Timestamp;
 import java.util.List;

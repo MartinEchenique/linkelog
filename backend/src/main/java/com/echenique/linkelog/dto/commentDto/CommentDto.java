@@ -1,5 +1,6 @@
-package com.echenique.linkelog.dto;
+package com.echenique.linkelog.dto.commentDto;
 
+import com.echenique.linkelog.dto.UserDto;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 
 import java.sql.Timestamp;

@@ -1,4 +1,4 @@
-package com.echenique.linkelog.dto;
+package com.echenique.linkelog.dto.commentDto;
 
 public class EditCommentDto {
     private String text;

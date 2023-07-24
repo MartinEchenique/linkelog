@@ -2,6 +2,9 @@ package com.echenique.linkelog.service;
 
 
 import com.echenique.linkelog.dto.*;
+import com.echenique.linkelog.dto.commentDto.AddCommentDto;
+import com.echenique.linkelog.dto.commentDto.CommentDto;
+import com.echenique.linkelog.dto.commentDto.EditCommentDto;
 import com.echenique.linkelog.exceptions.CommentLimitReached;
 import com.echenique.linkelog.exceptions.CommentNotFound;
 import com.echenique.linkelog.models.Comment;

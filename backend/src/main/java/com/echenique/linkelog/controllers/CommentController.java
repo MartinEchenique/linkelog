@@ -1,9 +1,6 @@
 package com.echenique.linkelog.controllers;
 
-import com.echenique.linkelog.dto.AddCommentDto;
-import com.echenique.linkelog.dto.CommentDto;
-
-import com.echenique.linkelog.dto.EditCommentDto;
+import com.echenique.linkelog.dto.commentDto.*;
 import com.echenique.linkelog.security.LoggedUserHelper;
 import com.echenique.linkelog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
