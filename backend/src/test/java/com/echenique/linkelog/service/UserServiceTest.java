@@ -21,6 +21,7 @@ class UserServiceTest {
     @MockBean
     private UserRepository userRepo;
 
+
     @InjectMocks
     @Autowired
     UserService userService;
