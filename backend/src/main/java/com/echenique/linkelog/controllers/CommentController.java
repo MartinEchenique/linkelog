@@ -33,8 +33,8 @@ public class CommentController {
     }
 
     @PreAuthorize("""
-            @commentAuthorizeCondition.loggedUserOwnsComment(#id) || 
-            @commentAuthorizeCondition.loggedUserOwnsPost(#id)
+            @commentAuthorizeCondition.loggedUserOwnsComment(#id) ||
+             @commentAuthorizeCondition.loggedUserOwnsPost(#id)
             """)
     @DeleteMapping(path="/remove/{id}")
     public void deleteComment(@PathVariable int id){

@@ -15,7 +15,6 @@ public class UserController {
     @CrossOrigin("http://localhost:4200")
     @GetMapping(value = "/user/{id}")
     public UserDto getUserById(@PathVariable int id){
-        UserDto userToReturn = userService.getUserDtoById(id);
-        return userToReturn;
+        return userService.getUserDtoById(id);
     }
 }

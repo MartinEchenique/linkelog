@@ -18,8 +18,8 @@ public class PostController {
 
     @GetMapping(value = "/post/{id}")
     public PostDto getPostById(@PathVariable int id){
-        PostDto postToReturn = postService.getPostById(id);
-        return  postToReturn;
+
+        return   postService.getPostById(id);
     }
 
     @GetMapping(value = "/postComplete/{id}")
