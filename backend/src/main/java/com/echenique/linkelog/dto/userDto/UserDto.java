@@ -7,7 +7,7 @@ public class UserDto {
     private String companyName;
     private String profilePictureUrl;
     private String role;
-
+    private String username;
     public int getUserId() {
         return userId;
     }
@@ -19,14 +19,14 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(int userId, String firstName, String lastName, String companyName, String profilePictureUrl, String role) {
+    public UserDto(int userId, String firstName, String lastName, String companyName, String profilePictureUrl, String role, String username) {
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
         this.profilePictureUrl = profilePictureUrl;
         this.role = role;
-        this.userId = userId;
-
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -67,5 +67,13 @@ public class UserDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

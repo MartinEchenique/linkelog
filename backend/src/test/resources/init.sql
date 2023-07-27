@@ -6,18 +6,21 @@ DROP TABLE IF EXISTS profile;
 -- Create profile table
 CREATE TABLE profile (
     userid INT PRIMARY KEY AUTO_INCREMENT,
-    firstname VARCHAR(40),
-    lastname VARCHAR(40),
+    firstname VARCHAR(40) NOT NULL,
+    lastname VARCHAR(40) NOT NULL,
     companyname VARCHAR(40),
     profilepictureurl TEXT,
-    userrole VARCHAR(40)
+    userrole VARCHAR(40),
+    username VARCHAR(40) NOT NULL,
+    password VARCHAR NOT NULL
+
 );
 --Create mock data for user
-insert into profile (firstname, lastname, companyname, profilepictureurl, userrole)
-values ('Example 1', 'One', 'Company 1', 'img:url', 'Role1'),
-       ('Example 2', 'Two', 'Company 2', 'img:url', 'Role2'),
-       ('Example 3', 'Three', 'Company 3', 'img:url', 'Role3'),
-       ('Example 4', 'Four', 'Company 4', 'img:url', 'Role4');
+insert into profile (firstname, lastname, companyname, profilepictureurl, userrole, userName, password)
+values ('Example 1', 'One', 'Company 1', 'img:url', 'Role1', 'user 1', '123' ),
+       ('Example 2', 'Two', 'Company 2', 'img:url', 'Role2', 'user 2', '123' ),
+       ('Example 3', 'Three', 'Company 3', 'img:url', 'Role3', 'user 3', '123' ),
+       ('Example 4', 'Four', 'Company 4', 'img:url', 'Role4', 'user 4', '123' );
 -- Create post table
 CREATE TABLE post (
     postid INT PRIMARY KEY AUTO_INCREMENT,
