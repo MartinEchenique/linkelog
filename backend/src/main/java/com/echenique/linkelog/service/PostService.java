@@ -1,11 +1,11 @@
 package com.echenique.linkelog.service;
 
-import com.echenique.linkelog.dto.*;
 import com.echenique.linkelog.dto.commentDto.CommentDto;
 import com.echenique.linkelog.dto.postDto.AddPostDto;
 import com.echenique.linkelog.dto.postDto.EditPostDto;
 import com.echenique.linkelog.dto.postDto.PostDto;
 import com.echenique.linkelog.dto.postDto.PostWithCommentsDto;
+import com.echenique.linkelog.dto.userDto.UserDto;
 import com.echenique.linkelog.models.Post;
 import com.echenique.linkelog.repositories.PostRepositoryInteface;
 import org.springframework.stereotype.Service;
@@ -77,10 +77,11 @@ public class PostService {
         int postId = editInfo.getPostId();
         String editText = editInfo.getText();
         String editImg = editInfo.getImg();
-        if(editImg != null){
+        if (editImg != null && editInfo != null) postRepo.editPost(editText,editImg, postId);
+        else if(editImg != null){
             postRepo.editPostImg(editImg, postId);
         }
-        if(editText != null){
+        else if(editText != null){
             postRepo.editPostText(editText, postId);
         }
     }

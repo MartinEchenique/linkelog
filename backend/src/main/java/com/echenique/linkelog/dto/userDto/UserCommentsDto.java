@@ -1,4 +1,4 @@
-package com.echenique.linkelog.dto;
+package com.echenique.linkelog.dto.userDto;
 
 import com.echenique.linkelog.models.Comment;
 

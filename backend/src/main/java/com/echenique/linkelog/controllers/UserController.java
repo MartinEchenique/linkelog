@@ -1,8 +1,6 @@
 package com.echenique.linkelog.controllers;
 
-import com.echenique.linkelog.dto.UserDto;
-import com.echenique.linkelog.models.UserProfile;
-import com.echenique.linkelog.repositories.UserRepositoryInterface;
+import com.echenique.linkelog.dto.userDto.UserDto;
 import com.echenique.linkelog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
