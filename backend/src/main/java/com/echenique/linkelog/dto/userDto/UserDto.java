@@ -1,4 +1,4 @@
-package com.echenique.linkelog.dto;
+package com.echenique.linkelog.dto.userDto;
 
 public class UserDto {
     private int userId;

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 
 @Repository
@@ -22,17 +21,16 @@ public class UserRepository implements UserRepositoryInterface {
     }
 
     @Override
-    public void addNewProfile(UserProfile user){
-        String sql = "INSERT INTO profile (firstname, lastname, companyname, profilepictureurl, userrole) " +
-                " values(?, ?, ?, ?, ?) ";
-        jdbcTemplate.update(sql, user.getFirstName(), user.getLastName() , user.getCompanyName(), user.getProfilePictureUrl(), user.getRole());
-    }
-
-    @Override
-    public void addNewProfile(String firstName, String lastName, String companyName, String profilePictureUrl, String role){
-        String sql = "INSERT INTO profile (firstname, lastname, companyname, profilepictureurl, userrole) " +
-                " values(?, ?, ?, ?, ?) ";
-        jdbcTemplate.update(sql, firstName, lastName ,companyName,profilePictureUrl, role);
+    public void addNewProfile(String firstName,
+                              String lastName,
+                              String companyName,
+                              String profilePictureUrl,
+                              String role,
+                              String userName,
+                              String password){
+        String sql = "INSERT INTO profile (firstname, lastname, companyname, profilepictureurl, userrole, username, password) " +
+                " values(?, ?, ?, ?, ?,?,?) ";
+        jdbcTemplate.update(sql, firstName, lastName ,companyName,profilePictureUrl, role, userName, password);
     }
 
     @Override
@@ -46,6 +44,37 @@ public class UserRepository implements UserRepositoryInterface {
     public UserProfile getProfileByUsername(String username) {
         String sql = "SELECT * from profile p WHERE p.username = ? " ;
         return jdbcTemplate.queryForObject(sql, new UserRowMapper(), username);
+    }
+
+    @Override
+    public int editUserRole(String newRole, int id) {
+        String sql = "UPDATE profile SET userrole=? where userid=?";
+        return jdbcTemplate.update(sql, newRole,id);
+    }
+
+    @Override
+    public int editUserCompany(String newCompany, int id) {
+        String sql = "UPDATE profile SET companyname=? where userid=?";
+        return jdbcTemplate.update(sql, newCompany,id);
+    }
+
+    @Override
+    public int editUserCompanyRole(String newRole, String newCompany, int id) {
+        int modificationsOnRows = editUserCompany(newCompany, id);
+        modificationsOnRows +=  editUserRole(newRole, id);
+        return ( modificationsOnRows == 0) ? 0 : 1;
+    }
+
+    @Override
+    public int editUserPicture(String newPicture, int id) {
+        String sql = "UPDATE profile SET profilepictureurl=? where userid=?";
+        return jdbcTemplate.update(sql, newPicture,id);
+    }
+
+    @Override
+    public int editUserPassword(String newPass, int id) {
+        String sql = "UPDATE profile SET password=? where userid=?";
+        return jdbcTemplate.update(sql, newPass,id);
     }
 
     private class UserRowMapper implements RowMapper<UserProfile> {

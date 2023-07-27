@@ -58,14 +58,22 @@ public class PostRepository implements PostRepositoryInteface {
     }
 
     @Override
+    public int editPost(String newText, String newImg, int id) {
+        int modificationsOnRows = editPostImg(newImg, id);
+        modificationsOnRows += editPostText(newText, id);
+        return ( modificationsOnRows == 0) ? 0 : 1;
+    }
+
+    @Override
     public int editPostImg(String newImg, int id) {
-        return 0;
+        String sql = "UPDATE post SET postimgurl=? WHERE postid=? ";
+        return jdbcTemplate.update(sql, newImg, id);
     }
 
     @Override
     public int editPostText(String newText, int id) {
-        return 0;
-    }
+        String sql = "UPDATE post SET postimgurl=? WHERE postid=? ";
+        return jdbcTemplate.update(sql, newText, id);    }
 
 
     private class PostMapper implements RowMapper<Post> {

@@ -15,6 +15,7 @@ public interface PostRepositoryInteface {
     List<Post> getPostPageAscDate(int pageSize, int pageNumber);
 
     int deletePost(int id);
+    int editPost(String newText, String newImg, int id);
     int editPostImg(String newImg, int id);
     int editPostText(String newText, int id);
 }
