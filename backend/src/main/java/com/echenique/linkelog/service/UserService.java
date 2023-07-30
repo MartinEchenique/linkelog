@@ -27,7 +27,6 @@ public class UserService {
         userRepo.addNewProfile(userToAdd.getFirstName(),
                 userToAdd.getLastName(),
                 userToAdd.getCompanyName(),
-                userToAdd.getProfilePictureUrl(),
                 userToAdd.getRole(),
                 userToAdd.getUsername(),
                 userToAdd.getPassword());

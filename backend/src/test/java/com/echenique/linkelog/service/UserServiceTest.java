@@ -62,27 +62,27 @@ class UserServiceTest {
     @Test
     @DisplayName("Add new user correct data")
     public void userService_addUser_addUserRepositoryIsCalled(){
-        AddUserDto userToAdd = new AddUserDto("first", "last", null, null, null,"user", "passWORD123" );
+        AddUserDto userToAdd = new AddUserDto("first", "last", null, null,"user", "passWORD123" );
         userService.addNewUser(userToAdd);
-        verify(userRepo, times(1)).addNewProfile("first", "last", null, null, null, "user", "passWORD123");
+        verify(userRepo, times(1)).addNewProfile("first", "last",  null, null, "user", "passWORD123");
     }
     @Test
     @DisplayName("Add new user firstname invalid")
     public void userService_addUser_throwsInvalidFirst(){
-        AddUserDto userToAdd = new AddUserDto("fi", "last", null, null, null,"user", "passWORD123" );
+        AddUserDto userToAdd = new AddUserDto("fi", "last", null,  null,"user", "passWORD123" );
         assertThrows(FailedValidationException.class, ()-> userService.addNewUser(userToAdd), "first name less than 3 char");
     }
     @Test
     @DisplayName("Add new user lastname invalid")
     public void userService_addUser_throwsInvalidLast(){
-        AddUserDto userToAdd = new AddUserDto("first", "la", null, null, null,"user", "passWORD123" );
+        AddUserDto userToAdd = new AddUserDto("first", "la", null,  null,"user", "passWORD123" );
         assertThrows(FailedValidationException.class, ()-> userService.addNewUser(userToAdd), "last name less than 3 char");
 
     }
     @Test
     @DisplayName("Add new user username invalid")
     public void userService_addUser_throwsInvalidUsername(){
-        AddUserDto userToAdd = new AddUserDto("first", "last", null, null, null,"us", "passWORD123" );
+        AddUserDto userToAdd = new AddUserDto("first", "last", null, null,"us", "passWORD123" );
 
         assertThrows(FailedValidationException.class, ()-> userService.addNewUser(userToAdd), "user less than 3 char");
 
@@ -90,7 +90,7 @@ class UserServiceTest {
     @Test
     @DisplayName("Add new user password invalid")
     public void userService_addUser_throwsInvalidPassword(){
-        AddUserDto userToAdd = new AddUserDto("first", "last", null, null, null,"user", "pass1A" );
+        AddUserDto userToAdd = new AddUserDto("first", "last",  null, null,"user", "pass1A" );
 
         assertThrows(FailedValidationException.class, ()-> userService.addNewUser(userToAdd), "pass less than 8 char");
 

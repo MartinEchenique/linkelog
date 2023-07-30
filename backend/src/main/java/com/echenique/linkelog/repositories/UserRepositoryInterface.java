@@ -7,7 +7,6 @@ public interface UserRepositoryInterface {
     void addNewProfile(String firstName,
                        String lastName,
                        String companyName,
-                       String profilePictureUrl,
                        String roleString,
                        String userName,
                        String password);

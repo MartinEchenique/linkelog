@@ -87,7 +87,7 @@ class UserRepositoryTest {
     @Sql("/init_no_user.sql")
     @DisplayName("register new user")
     public void userRepository_registerNewUser_userIsRegistered(){
-        userRepo.addNewProfile("first", "last", "company", "url", "role", "name", "pass");
+        userRepo.addNewProfile("first", "last", "company", "role", "name", "pass");
 
         UserProfile profile = userRepo.getProfileById(1);
 

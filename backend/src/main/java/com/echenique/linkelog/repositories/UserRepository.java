@@ -24,13 +24,12 @@ public class UserRepository implements UserRepositoryInterface {
     public void addNewProfile(String firstName,
                               String lastName,
                               String companyName,
-                              String profilePictureUrl,
                               String role,
                               String userName,
                               String password){
-        String sql = "INSERT INTO profile (firstname, lastname, companyname, profilepictureurl, userrole, username, password) " +
-                " values(?, ?, ?, ?, ?,?,?) ";
-        jdbcTemplate.update(sql, firstName, lastName ,companyName,profilePictureUrl, role, userName, password);
+        String sql = "INSERT INTO profile (firstname, lastname, companyname,  userrole, username, password) " +
+                " values(?, ?, ?, ?,?,?) ";
+        jdbcTemplate.update(sql, firstName, lastName ,companyName, role, userName, password);
     }
 
     @Override

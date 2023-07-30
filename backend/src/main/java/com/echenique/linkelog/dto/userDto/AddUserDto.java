@@ -7,7 +7,6 @@ public class AddUserDto {
     private String firstName;
     private String lastName;
     private String companyName;
-    private String profilePictureUrl;
     private String role;
     private String username;
     private String password;
@@ -15,11 +14,10 @@ public class AddUserDto {
     public AddUserDto() {
     }
 
-    public AddUserDto(String firstName, String lastName, String companyName, String profilePictureUrl, String role, String username, String password) {
+    public AddUserDto(String firstName, String lastName, String companyName,  String role, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
-        this.profilePictureUrl = profilePictureUrl;
         this.role = role;
         this.username = username;
         this.password = password;
@@ -47,14 +45,6 @@ public class AddUserDto {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    }
-
-    public String getProfilePictureUrl() {
-        return profilePictureUrl;
-    }
-
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        this.profilePictureUrl = profilePictureUrl;
     }
 
     public String getRole() {
