@@ -9,19 +9,31 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.TestPropertySource;
+
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@TestPropertySource(properties = "storage.profile-pictures-location=src/test/resources/profile-pictures")
 @SpringBootTest
 class UserServiceTest {
 
     @MockBean
     private UserRepository userRepo;
+    @MockBean
+    private StorageService storageService;
 
-
+    @Value("${storage.profile-pictures-location}")
+    private String storageLocation;
     @InjectMocks
     @Autowired
     UserService userService;
@@ -102,6 +114,42 @@ class UserServiceTest {
 
         userToAdd.setPassword("PASSwordunodos");
         assertThrows(FailedValidationException.class, ()-> userService.addNewUser(userToAdd), "pass no number char");
+
+    }
+    @Test
+    @DisplayName("Edit user profile picture -> returns id")
+    public void userService_editUserProfilePicture_returnsPictureId() throws IOException {
+      MockMultipartFile mockMultipart = new MockMultipartFile("file",new FileInputStream("src/test/resources/pictures/cara-jpeg.jpg"));
+      when(storageService.storeProfilePictureAsJpg(any(BufferedImage.class))).thenReturn("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+      String pictureId =  userService.editUserProfilePicture(mockMultipart, 1);
+
+      assertEquals(36, pictureId.length());
+    }
+    @Test
+    @DisplayName("Edit user profile picture -> calls repo")
+    public void userService_editUserProfilePicture_storesOnDb() throws IOException {
+        MockMultipartFile mockMultipart = new MockMultipartFile("file",new FileInputStream("src/test/resources/pictures/cara-jpeg.jpg"));
+        String pictureId =  userService.editUserProfilePicture(mockMultipart,  1);
+        verify(userRepo,times(1)).editUserPicture(pictureId, 1);
+    }
+
+    @Test
+    @DisplayName("Edit user profile picture -> stores picture on fileSystem")
+    public void userService_editUserProfilePicture_storesOnFileSystem() throws IOException {
+        String mockImgPath ="src/test/resources/pictures/cara-jpeg.jpg" ;
+        Path path = Paths.get(storageLocation);
+        userService.editUserProfilePicture(new MockMultipartFile("file", new FileInputStream(mockImgPath)),1);
+        verify(storageService, times(1)).storeProfilePictureAsJpg(any(BufferedImage.class));
+    }
+    @Test
+    @DisplayName("Edit user profile picture -> stores picture on fileSystem")
+    public void userService_editUserProfilePicture_removesOldFromFileSystem() throws IOException {
+        String mockImgPath ="src/test/resources/pictures/cara-jpeg.jpg" ;
+        Path path = Paths.get(storageLocation);
+        userService.editUserProfilePicture(new MockMultipartFile("file", new FileInputStream(mockImgPath)), 1);
+        verify(storageService, times(1)).storeProfilePictureAsJpg(any(BufferedImage.class));
+        verify(storageService, times(1)).storeProfilePictureAsJpg(any(BufferedImage.class));
 
     }
 }

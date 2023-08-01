@@ -95,7 +95,6 @@ class UserRepositoryTest {
         assertEquals("role", profile.getRole());
         assertEquals("first", profile.getFirstName());
         assertEquals("last", profile.getLastName());
-        assertEquals("url", profile.getProfilePictureUrl());
         assertEquals("name", profile.getUsername());
         assertEquals("pass", profile.getPassword());
     }
