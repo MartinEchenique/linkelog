@@ -45,7 +45,7 @@ class StorageServiceTest {
         Path storedPath = Paths.get(profilePicturesLocation).resolve(picId)
                 .normalize().toAbsolutePath();
         assertFalse(Files.notExists(storedPath));
-        storageService.deleteProfilePicture(storedPath);
+        storageService.deleteProfilePicture(picId);
         assertTrue(Files.notExists(storedPath));
 
     }
@@ -61,10 +61,9 @@ class StorageServiceTest {
         BufferedImage img = ImageIO.read(new FileInputStream(imgToStorePath));
 
         String picId= storageService.storeProfilePictureAsJpg(img);
-        Path storedPath = Paths.get(profilePicturesLocation).resolve(picId)
-                .normalize().toAbsolutePath();
+
         assertEquals(36, picId.length());
-        storageService.deleteProfilePicture(storedPath);
+        storageService.deleteProfilePicture(picId);
     }
 
 }

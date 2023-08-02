@@ -16,7 +16,8 @@ import java.util.UUID;
 public class StorageService {
     @Value("${storage.profile-pictures-location}")
     private String profilePictureLocation;
-
+    @Value("${user.profile-pictures-default}")
+    private String DEFAULT_PICTURE_ID;
     public String storeProfilePictureAsJpg(BufferedImage pic) throws IOException {
         String pictureId = UUID.randomUUID().toString();
         Path storagePath = Paths.get(profilePictureLocation).resolve(
@@ -30,8 +31,11 @@ public class StorageService {
     }
 
 
-    public void deleteProfilePicture(Path path) throws IOException {
-        if(null == path) return;
+    public void deleteProfilePicture(String pictureId) throws IOException {
+        if(null == pictureId || pictureId.isBlank() || pictureId.equals(DEFAULT_PICTURE_ID) ) return;
+        Path path = Paths.get(profilePictureLocation).resolve(
+                        Paths.get(pictureId))
+                .normalize().toAbsolutePath();
         Files.deleteIfExists(path);
     }
 }

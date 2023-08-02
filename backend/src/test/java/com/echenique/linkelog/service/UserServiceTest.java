@@ -1,6 +1,7 @@
 package com.echenique.linkelog.service;
 
 import com.echenique.linkelog.dto.userDto.AddUserDto;
+import com.echenique.linkelog.dto.userDto.EditProfilePictureDto;
 import com.echenique.linkelog.dto.userDto.UserDto;
 import com.echenique.linkelog.exceptions.FailedValidationException;
 import com.echenique.linkelog.models.UserProfile;
@@ -19,7 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,8 +41,8 @@ class UserServiceTest {
     @Test
     @DisplayName("Get user by id")
     public void userService_getUserDtoById_returnUserDto() {
-        when(userRepo.getProfileById(1)).thenReturn(new UserProfile(1, "first", "last",
-                "company", "pic", "role","user", "pass"));
+        when(userRepo.getProfileById(1)).thenReturn(Optional.of(new UserProfile(1, "first", "last",
+                "company", "pic", "role","user", "pass")));
 
         UserDto dto = userService.getUserDtoById(1);
 
@@ -57,8 +58,8 @@ class UserServiceTest {
     @Test
     @DisplayName("Get user by username")
     public void userService_getUserDtoByUsername_returnUserDto() {
-        when(userRepo.getProfileByUsername("user")).thenReturn(new UserProfile(1, "first", "last",
-                "company", "pic", "role","user", "pass"));
+        when(userRepo.getProfileByUsername("user")).thenReturn(Optional.of(new UserProfile(1, "first", "last",
+                "company", "pic", "role","user", "pass")));
 
         UserDto dto = userService.getUserDtoByUsername("user");
 
@@ -74,9 +75,10 @@ class UserServiceTest {
     @Test
     @DisplayName("Add new user correct data")
     public void userService_addUser_addUserRepositoryIsCalled(){
+
         AddUserDto userToAdd = new AddUserDto("first", "last", null, null,"user", "passWORD123" );
         userService.addNewUser(userToAdd);
-        verify(userRepo, times(1)).addNewProfile("first", "last",  null, null, "user", "passWORD123");
+        verify(userRepo, times(1)).addNewProfile("first", "last", null,null,"default", "user", "passWORD123");
     }
     @Test
     @DisplayName("Add new user firstname invalid")
@@ -121,8 +123,10 @@ class UserServiceTest {
     public void userService_editUserProfilePicture_returnsPictureId() throws IOException {
       MockMultipartFile mockMultipart = new MockMultipartFile("file",new FileInputStream("src/test/resources/pictures/cara-jpeg.jpg"));
       when(storageService.storeProfilePictureAsJpg(any(BufferedImage.class))).thenReturn("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        when(userRepo.getProfileById(1)).thenReturn(Optional.of(new UserProfile(1, "first", "last",
+                "company", "pic", "role","user", "pass")));
 
-      String pictureId =  userService.editUserProfilePicture(mockMultipart, 1);
+      String pictureId =  userService.editUserProfilePicture(mockMultipart, new EditProfilePictureDto(),1);
 
       assertEquals(36, pictureId.length());
     }
@@ -130,7 +134,10 @@ class UserServiceTest {
     @DisplayName("Edit user profile picture -> calls repo")
     public void userService_editUserProfilePicture_storesOnDb() throws IOException {
         MockMultipartFile mockMultipart = new MockMultipartFile("file",new FileInputStream("src/test/resources/pictures/cara-jpeg.jpg"));
-        String pictureId =  userService.editUserProfilePicture(mockMultipart,  1);
+        when(userRepo.getProfileById(1)).thenReturn(Optional.of(new UserProfile(1, "first", "last",
+                "company", "pic", "role","user", "pass")));
+
+        String pictureId =  userService.editUserProfilePicture(mockMultipart, new EditProfilePictureDto(),  1);
         verify(userRepo,times(1)).editUserPicture(pictureId, 1);
     }
 
@@ -139,15 +146,21 @@ class UserServiceTest {
     public void userService_editUserProfilePicture_storesOnFileSystem() throws IOException {
         String mockImgPath ="src/test/resources/pictures/cara-jpeg.jpg" ;
         Path path = Paths.get(storageLocation);
-        userService.editUserProfilePicture(new MockMultipartFile("file", new FileInputStream(mockImgPath)),1);
+        when(userRepo.getProfileById(1)).thenReturn(Optional.of(new UserProfile(1, "first", "last",
+                "company", "pic", "role","user", "pass")));
+
+        userService.editUserProfilePicture(new MockMultipartFile("file", new FileInputStream(mockImgPath)), new EditProfilePictureDto(),1);
         verify(storageService, times(1)).storeProfilePictureAsJpg(any(BufferedImage.class));
     }
     @Test
     @DisplayName("Edit user profile picture -> stores picture on fileSystem")
     public void userService_editUserProfilePicture_removesOldFromFileSystem() throws IOException {
         String mockImgPath ="src/test/resources/pictures/cara-jpeg.jpg" ;
+        when(userRepo.getProfileById(1)).thenReturn(Optional.of(new UserProfile(1, "first", "last",
+                "company", "pic", "role","user", "pass")));
+
         Path path = Paths.get(storageLocation);
-        userService.editUserProfilePicture(new MockMultipartFile("file", new FileInputStream(mockImgPath)), 1);
+        userService.editUserProfilePicture(new MockMultipartFile("file", new FileInputStream(mockImgPath)), new EditProfilePictureDto(),1);
         verify(storageService, times(1)).storeProfilePictureAsJpg(any(BufferedImage.class));
         verify(storageService, times(1)).storeProfilePictureAsJpg(any(BufferedImage.class));
 

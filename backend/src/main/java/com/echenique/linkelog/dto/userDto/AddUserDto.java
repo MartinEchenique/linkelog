@@ -14,7 +14,7 @@ public class AddUserDto {
     public AddUserDto() {
     }
 
-    public AddUserDto(String firstName, String lastName, String companyName,  String role, String username, String password) {
+    public AddUserDto(String firstName, String lastName, String companyName, String role, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
@@ -74,11 +74,14 @@ public class AddUserDto {
     public void validate() throws FailedValidationException {
         final String pswPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
         String error = "";
+        if(this.firstName == null || this.lastName == null || this.username == null || this.password == null )
+            error += "Firstname, lastname, username and password are required";
+        else{
         if(this.firstName.length() < 3) error += " - first name must have 3 or more characters";
         if(this.lastName.length() < 3) error += " - last name must have 3 or more characters";
         if(this.username.length() < 3) error += " - username must have 3 or more characters";
         if(!this.password.matches(pswPattern)) error+= " - non valid password";
-
-        if(!error.equals("")) throw new FailedValidationException(error);
+        }
+        if(!error.isBlank()) throw new FailedValidationException(error);
     }
 }

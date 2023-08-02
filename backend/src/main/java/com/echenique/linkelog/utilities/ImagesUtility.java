@@ -1,5 +1,6 @@
 package com.echenique.linkelog.utilities;
 
+import com.echenique.linkelog.exceptions.CoordinatesOutOfRangeException;
 import com.echenique.linkelog.exceptions.IllegalFileTypeException;
 import com.echenique.linkelog.exceptions.MultipartFileReadException;
 import org.springframework.stereotype.Component;
@@ -16,8 +17,13 @@ public class ImagesUtility {
 
 
     public static BufferedImage cropImage(BufferedImage img, int x, int y, int size){
-        if (img.getWidth() <= img.getHeight() && img.getWidth() < (x + size)) size = img.getWidth() - x;
-        else if(img.getHeight() < (y + size)) size = img.getHeight() - y;
+
+        int imgWidth = img.getWidth();
+        int imgHeight = img.getHeight();
+        //validates crop options
+        if(imgWidth < x || imgHeight < y) throw new CoordinatesOutOfRangeException("start point coordinates are out of picture");
+        if ( imgWidth <= imgHeight && imgWidth < (x + size)) size = imgWidth - x;
+        else if(imgHeight < (y + size)) size = imgHeight - y;
 
         return img.getSubimage(x,y,size,size);
     }
@@ -45,5 +51,11 @@ public class ImagesUtility {
         }catch (IOException e){
             throw new MultipartFileReadException("Error processing the file");
         }
+    }
+
+    public static BufferedImage ResizeImg(BufferedImage img, int width, int height) {
+        BufferedImage newImage = new BufferedImage(width,height, BufferedImage.TYPE_INT_RGB);
+        newImage.createGraphics().drawImage( img, 0, 0,width,height, Color.BLACK, null);
+        return newImage;
     }
 }

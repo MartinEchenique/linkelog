@@ -2,18 +2,21 @@ package com.echenique.linkelog.repositories;
 
 import com.echenique.linkelog.models.UserProfile;
 
+import java.util.Optional;
+
 public interface UserRepositoryInterface {
 
     void addNewProfile(String firstName,
                        String lastName,
                        String companyName,
                        String roleString,
+                       String profilePicture,
                        String userName,
                        String password);
 
-    UserProfile getProfileById(int id);
+    Optional<UserProfile> getProfileById(int id);
 
-    UserProfile getProfileByUsername(String username);
+    Optional<UserProfile> getProfileByUsername(String username);
 
     int editUserRole(String newRole, int id);
 
