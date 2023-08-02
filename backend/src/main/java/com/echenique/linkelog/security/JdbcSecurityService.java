@@ -15,7 +15,7 @@ public class JdbcSecurityService implements UserDetailsService {
     private UserRepository userRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserProfile user = userRepository.getProfileByUsername(username);
+        UserProfile user = userRepository.getProfileByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
         return new UserSecurity(user);
     }
 }

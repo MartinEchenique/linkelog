@@ -6,7 +6,7 @@ import com.echenique.linkelog.dto.commentDto.EditCommentDto;
 import com.echenique.linkelog.dto.userDto.UserCommentsDto;
 import com.echenique.linkelog.dto.userDto.UserDto;
 import com.echenique.linkelog.exceptions.CommentLimitReached;
-import com.echenique.linkelog.exceptions.CommentNotFound;
+import com.echenique.linkelog.exceptions.ResourceNotFound;
 import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.repositories.CommentRepositoryInterface;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class CommentService {
         return new CommentDto(user, comment.getTexto(), comment.getFechaPublicacion(), comment.getPostId(), comment.getCommentId());
     }
     public CommentDto getCommentDtoById(int id) {
-        Comment comment = commentRepo.getCommentById(id).orElseThrow(CommentNotFound::new);
+        Comment comment = commentRepo.getCommentById(id).orElseThrow(()-> new ResourceNotFound("Comment not found"));
         return this.getCommentDto(comment);
     }
     public List<CommentDto> getCommentsByPostId(int postId){

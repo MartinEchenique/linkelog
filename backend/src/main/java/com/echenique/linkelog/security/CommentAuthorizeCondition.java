@@ -1,6 +1,5 @@
 package com.echenique.linkelog.security;
 
-import com.echenique.linkelog.repositories.CommentRepository;
 import com.echenique.linkelog.service.CommentService;
 import com.echenique.linkelog.service.PostService;
 import org.springframework.stereotype.Component;

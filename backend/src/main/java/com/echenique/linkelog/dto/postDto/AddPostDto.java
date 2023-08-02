@@ -1,7 +1,5 @@
 package com.echenique.linkelog.dto.postDto;
 
-import java.sql.Timestamp;
-import java.util.List;
 
 public class AddPostDto {
     private int authorId;

@@ -1,7 +1,10 @@
 package com.echenique.linkelog.repositories;
 
+import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.models.UserProfile;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -9,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 
 @Repository
@@ -24,26 +28,41 @@ public class UserRepository implements UserRepositoryInterface {
     public void addNewProfile(String firstName,
                               String lastName,
                               String companyName,
-                              String profilePictureUrl,
                               String role,
+                              String profilepicture,
                               String userName,
                               String password){
-        String sql = "INSERT INTO profile (firstname, lastname, companyname, profilepictureurl, userrole, username, password) " +
-                " values(?, ?, ?, ?, ?,?,?) ";
-        jdbcTemplate.update(sql, firstName, lastName ,companyName,profilePictureUrl, role, userName, password);
+        String sql = "INSERT INTO profile (firstname, lastname, companyname,  userrole, profilepictureurl, username, password) " +
+                " values(?, ?, ?, ?, ?, ?, ?) ";
+        jdbcTemplate.update(sql, firstName, lastName ,companyName, role, profilepicture, userName, password);
     }
 
     @Override
-    public UserProfile getProfileById(int id){
+    public Optional<UserProfile> getProfileById(int id){
         String sql = "SELECT * from profile p WHERE p.userid = ? " ;
-        return jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+        UserProfile result;
+        try {
+            result = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
 
+        }catch (EmptyResultDataAccessException e){
+            result = null;
+        }
+        Optional<UserProfile> optionalUser = Optional.ofNullable(result);
+        return optionalUser;
     }
 
     @Override
-    public UserProfile getProfileByUsername(String username) {
+    public Optional<UserProfile> getProfileByUsername(String username) {
         String sql = "SELECT * from profile p WHERE p.username = ? " ;
-        return jdbcTemplate.queryForObject(sql, new UserRowMapper(), username);
+        UserProfile result;
+        try {
+            result = jdbcTemplate.queryForObject(sql, new UserRowMapper(), username);
+
+        }catch (EmptyResultDataAccessException e){
+            result = null;
+        }
+        Optional<UserProfile> optionalUser = Optional.ofNullable(result);
+        return optionalUser;
     }
 
     @Override
