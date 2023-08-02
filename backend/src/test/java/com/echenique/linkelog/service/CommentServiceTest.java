@@ -7,7 +7,7 @@ import com.echenique.linkelog.dto.commentDto.EditCommentDto;
 import com.echenique.linkelog.dto.userDto.UserCommentsDto;
 import com.echenique.linkelog.dto.userDto.UserDto;
 import com.echenique.linkelog.exceptions.CommentLimitReached;
-import com.echenique.linkelog.exceptions.CommentNotFound;
+import com.echenique.linkelog.exceptions.ResourceNotFound;
 import com.echenique.linkelog.models.Comment;
 import com.echenique.linkelog.repositories.CommentRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -78,7 +78,7 @@ class CommentServiceTest {
         Optional<Comment> optionalComment = Optional.empty();
 
         when(commentRepo.getCommentById(1)).thenReturn(optionalComment);
-        assertThrows(CommentNotFound.class,() ->  commentService.getCommentDtoById(1));
+        assertThrows(ResourceNotFound.class,() ->  commentService.getCommentDtoById(1));
     }
 
     @Test
