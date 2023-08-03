@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LoginService } from '../login.service';
+import { LoginService } from '../login/login.service';
 import { Comentario } from '../models/comentario.model';
 import { Post } from '../models/post.model';
 import { ObtenerPostService } from '../post.service';

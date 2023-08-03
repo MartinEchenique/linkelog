@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../login.service';
+import { LoginService } from '../login/login.service';
 import { Comentario } from '../models/comentario.model';
 import { Post } from '../models/post.model';
 import { Reaccion } from '../models/reaccion.model';
