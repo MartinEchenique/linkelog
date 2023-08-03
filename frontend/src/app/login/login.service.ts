@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { SignUpDetails } from '../Dto/SignUpDetails.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,9 @@ export class LoginService {
     return this.http.get(`http://localhost:8080/user/${userId}`).subscribe((data:any) =>{
       this.loggedUser = data;
     });
-   // this.loggedUser = new User("Albert", "Einsten","","","https://thispersondoesnotexist.com/");
+  }
+  signUp(bodyInfo:SignUpDetails):Observable<any>{
+    return this.http.post(`http://localhost:8080/user/new`,bodyInfo,{observe: 'response'});
   }
   getLoggedUser(){
     return this.loggedUser;
